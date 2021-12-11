@@ -58,10 +58,10 @@ export default defineComponent({
     padding: 15px;
   }
   .search_area{
-    margin-bottom: 15px;
+    border-bottom: 1px solid #eaeef2;
   }
   .table_area{
-
+    margin-top:10px ;
   }
 }
 </style>

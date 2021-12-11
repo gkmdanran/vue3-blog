@@ -5,12 +5,14 @@ import routeApp from './App.vue'
 import router from './router'
 import store from './store'
 import baseUi from './base-ui'
+import globalRegister  from './global'
 import './assets/css/global.css'
 import 'element-plus/dist/index.css'
 const app: App = createApp(routeApp)
 app.use(ElementPlus, {
     locale: zhCn,
 })
+app.use(globalRegister)
 app.use(baseUi)
 app.use(store)
 app.use(router)

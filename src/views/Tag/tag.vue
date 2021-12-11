@@ -2,14 +2,20 @@
   <base-container
     :breadcrumbs="[{ name: '首页', path: '/home' }, { name: '标签管理' }]"
   >
+    <template #search>
+      <base-search
+        :form-json="searchJson"
+        @changeForm="changeForm"
+      ></base-search>
+    </template>
     <template #table>
       <base-table
-      @changePagination="change"
-        :table-data="tableData"
-        :table-json="tableJson"
-        :total="total"
         border
         stripe
+        :table-data="tableData"
+        :table-json="tableJson"
+        v-model:pagination="pagination"
+        @changePagination="searchList"
       >
         <template #tagName="scope">
           <el-tag :type="scope.row.type">{{ scope.row.tagName }}</el-tag>
@@ -29,14 +35,17 @@
           >篇
         </template>
         <template #handler="scope">
-          <el-button
+          <base-button
             type="text"
             @click="checkArticle(scope.row._id)"
             :disabled="scope.row.blogsStrs == ''"
-            >查看文章</el-button
+            >查看文章</base-button
           >
-          <el-button type="text" @click="handleDel(scope.row._id)"
-            >删除</el-button
+          <base-button
+            type="text"
+            @confirmClick="confirmDelTag(scope.row._id)"
+            :confirm="{ message: '你确定删除此标签吗？' }"
+            >删除</base-button
           >
         </template>
       </base-table>
@@ -44,38 +53,59 @@
   </base-container>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onBeforeUnmount, watch, onMounted } from "vue";
-import { getTag } from "@/http/tag";
-import { ITagItem } from "./type";
-import { tableJson } from "./tagJson";
+import { defineComponent, ref, reactive } from "vue";
+import { getTag, delTag } from "@/http/tag";
+import { ITagItem, ISearchForm } from "./type";
+import { tableJson, searchJson } from "./tagJson";
+import { IPagination } from "@/base-ui/baseTable/src/type";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "Tag",
   components: {},
   setup() {
-    const page = ref<number>(1);
-    const size = ref<number>(10);
-    const total = ref<number>(0);
-    const query = ref<string>("");
+    let searchForm = reactive<ISearchForm>({ query: "" });
     const tableData = ref<ITagItem[]>([]);
+    const pagination = reactive<IPagination>({ page: 1, size: 5, total: 0 });
+    const router = useRouter();
     function searchList() {
-      getTag(query.value, page.value, size.value).then((res) => {
+      getTag(searchForm.query, pagination.page, pagination.size).then((res) => {
         if (res.code == 200) {
           tableData.value = res.data.list;
-          total.value = res.data.total;
-          console.log(tableData.value);
+          pagination.total = res.data.total;
         }
       });
     }
-    function change(v:any){
-      console.log(v)
+    function confirmDelTag(id: string) {
+      delTag(id).then((res) => {
+        if (res.code == 200) {
+          pagination.page = 1;
+          searchList();
+        }
+      });
+    }
+    function changeForm(form: ISearchForm) {
+      searchForm = form;
+      searchList();
+    }
+    function checkArticle(id: string) {
+      router.push({
+        name: "Article",
+        params: {
+          tagId: id,
+        },
+      });
     }
 
     searchList();
     return {
       tableData,
       tableJson,
-      total,
-      change
+      searchJson,
+      pagination,
+      changeForm,
+      searchList,
+      checkArticle,
+      confirmDelTag,
     };
   },
 });

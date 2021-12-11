@@ -5,4 +5,12 @@ export function getTag(query: string, page: number, size: number): Promise<IData
         url: `/tags?query=${query}&pageNum=${page}&pageSize=${size}`,
     })
 }
+export function delTag(id: string): Promise<IDataType> {
+    return hyRequest.post<IDataType>({
+        url: `/deltag`,
+        data: {
+            id
+        }
+    })
 
+}

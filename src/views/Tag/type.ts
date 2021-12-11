@@ -5,3 +5,6 @@ export interface ITagItem {
     type: string,
     __v: number
 }
+export interface ISearchForm {
+    query: string
+}

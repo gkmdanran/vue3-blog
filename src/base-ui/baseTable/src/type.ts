@@ -1,8 +1,28 @@
 import { TableProps } from 'element-plus/lib/components/table/src/table/defaults'
-interface BaseTableProps<T> extends  Omit<TableProps<any>, 'data'> {
-   data?:[T]
+interface BaseTableProps<T> extends Omit<TableProps<any>, 'data'> {
+    data?: [T]
 }
-export interface ITable<T=any> {
-    pagination?:any
-    columns:any[]
+interface IPaginationAttributes {
+    small?: boolean
+    background?: boolean;
+    defaultPageSize?: number;
+    pagerCount?: number;
+    defaultCurrentPage?: number;
+    layout?: string;
+    pageSizes?: number[];
+    popperClass?: string;
+    prevText?: string;
+    nextText?: string;
+    disabled?: boolean;
+    hideOnSinglePage?: boolean;
+}
+export interface ITable {
+    title?:string
+    columns: any[],
+    paginationAttributes?: IPaginationAttributes
+}
+export interface IPagination {
+    page: number,
+    size: number,
+    total: number
 }

@@ -1,5 +1,10 @@
 export const tableJson = {
+    title:'标签列表',
     columns: [
+        {
+            type:'selection',
+            width:60
+        },
         {
             label: '标签名',
             prop: "tagName",
@@ -15,5 +20,17 @@ export const tableJson = {
             slotName: 'handler'
         }
     ],
-    
+
+}
+export const searchJson = {
+    formAttributes: {
+        labelWidth: "70px",
+    },
+    formItems: [
+        {
+            prop: "query",
+            label: "标签名",
+            type: "input",
+        },
+    ],
 }

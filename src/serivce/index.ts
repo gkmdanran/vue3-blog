@@ -17,8 +17,8 @@ const hyRequest = new HYRequest({
             if (res.data.msg) {
                 ElMessage({
                     message: res.data.msg,
-                    type: res.data.code == 200 ? 'success' : 'error',
-                    duration: 1200
+                    type: res.data.code == 200 ? 'success' : 'warning',
+                    duration: 2000
                 })
             }
             return res.data
