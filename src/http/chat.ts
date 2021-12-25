@@ -6,3 +6,13 @@ export function getChat(queryPeople: string, queryDate: any, pageNum: number, pa
     })
 }
 
+export function delChats(ids: string): Promise<IDataType> {
+    return hyRequest.post<IDataType>({
+        url: `/delchats`,
+        data: {
+            ids
+        }
+    })
+}
+
+

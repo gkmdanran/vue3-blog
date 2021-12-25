@@ -1,10 +1,7 @@
 export const tableJson = {
     title:'标签列表',
     columns: [
-        {
-            type:'selection',
-            width:60
-        },
+       
         {
             label: '标签名',
             prop: "tagName",

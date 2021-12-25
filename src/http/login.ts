@@ -1,10 +1,11 @@
 import hyRequest from "@/serivce";
 import type { IDataType } from './type'
-export function accountLoginRequest(userName: string, password: string):Promise<IDataType> {
+export function accountLoginRequest(username: string, password: string):Promise<IDataType> {
+    console.log(username,password)
     return hyRequest.post<IDataType>({
-        url: '/login',
+        url: '/user/login',
         data: {
-            userName,
+            username,
             password,
         },
     })

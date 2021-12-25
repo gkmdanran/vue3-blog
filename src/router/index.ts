@@ -21,6 +21,16 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Chat',
         component: () => import('../views/Chat/chat.vue')
       },
+      {
+        path: '/music',
+        name: 'Music',
+        component: () => import('../views/Music/music.vue')
+      },
+      {
+        path: '/filelists',
+        name: 'File',
+        component: () => import('../views/File/file.vue')
+      },
     ]
   },
 

@@ -14,9 +14,17 @@
         :table-json="tableJson"
         v-model:pagination="pagination"
         @changePagination="searchList"
-      > 
+        @selection-change="handleSelectionChange"
+      >
         <template #topHandler>
-          <el-button type="danger" size="small">批量删除</el-button>
+          <base-button
+            type="danger"
+            size="small"
+            :disabled="!delIds"
+            :confirm="{ message: '确认删除选中的留言吗？' }"
+            @confirmClick="confirmDelChats"
+            >批量删除</base-button
+          >
         </template>
         <template #chatWay="scope">
           <span>{{
@@ -34,7 +42,7 @@
 import { defineComponent, ref, reactive } from "vue";
 import { IChatItem, ISearchForm } from "./type";
 import { tableJson, searchJson } from "./chatJson";
-import { getChat } from "@/http/chat";
+import { getChat, delChats } from "@/http/chat";
 import { IPagination } from "@/base-ui/baseTable/src/type";
 export default defineComponent({
   name: "Chat",
@@ -43,6 +51,7 @@ export default defineComponent({
     let searchForm = reactive<ISearchForm>({ queryPeople: "", queryDate: "" });
     const tableData = ref<IChatItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 5, total: 0 });
+    const delIds = ref<string>("");
     function searchList() {
       getChat(
         searchForm.queryPeople,
@@ -61,15 +70,31 @@ export default defineComponent({
       searchForm = form;
       searchList();
     }
-
+    function handleSelectionChange(rows: IChatItem[]) {
+      var arrIds: string[] = [];
+      rows.forEach((item) => {
+        arrIds.push(item._id);
+      });
+      delIds.value = arrIds.join(",");
+    }
+    function confirmDelChats() {
+      delChats(delIds.value).then((res) => {
+        if (res.code == 200) {
+          searchList();
+        }
+      });
+    }
     searchList();
     return {
       tableData,
       tableJson,
       searchJson,
       pagination,
+      delIds,
+      confirmDelChats,
       changeForm,
       searchList,
+      handleSelectionChange,
     };
   },
 });
