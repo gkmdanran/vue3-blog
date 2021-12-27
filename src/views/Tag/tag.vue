@@ -18,9 +18,9 @@
         @changePagination="searchList"
       >
         <template #tagName="scope">
-          <el-tag :type="scope.row.type">{{ scope.row.tagName }}</el-tag>
+          <el-tag :type="scope.row.type">{{ scope.row.name }}</el-tag>
         </template>
-        <template #blogsStrs="scope">
+        <!-- <template #blogsStrs="scope">
           <span
             :style="{
               color: scope.row.blogsStrs == '' ? 'red' : 'black',
@@ -33,7 +33,7 @@
                 : scope.row.blogsStrs.split(",").length
             }}</span
           >篇
-        </template>
+        </template> -->
         <template #handler="scope">
           <base-button
             type="text"
@@ -43,7 +43,7 @@
           >
           <base-button
             type="text"
-            @confirmClick="confirmDelTag(scope.row._id)"
+            @confirmClick="confirmDelTag(scope.row.id)"
             :confirm="{ message: '你确定删除此标签吗？' }"
             >删除</base-button
           >
@@ -65,7 +65,7 @@ export default defineComponent({
   setup() {
     let searchForm = reactive<ISearchForm>({ query: "" });
     const tableData = ref<ITagItem[]>([]);
-    const pagination = reactive<IPagination>({ page: 1, size: 5, total: 0 });
+    const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     const router = useRouter();
     function searchList() {
       getTag(searchForm.query, pagination.page, pagination.size).then((res) => {

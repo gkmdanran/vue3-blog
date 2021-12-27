@@ -1,10 +1,9 @@
 export interface IChatItem {
-    _id: string,
+    id: string,
     chatName: string,
     chatContent: string,
     chatWay: string,
     createTime: string,
-    __v: number
 }
 export interface ISearchForm {
     queryPeople: string 

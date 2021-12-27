@@ -4,14 +4,14 @@ export const tableJson = {
        
         {
             label: '标签名',
-            prop: "tagName",
+            prop: "name",
             slotName: 'tagName'
         },
-        {
-            label: "文章数量",
-            prop: "blogsStrs",
-            slotName: 'blogsStrs'
-        },
+        // {
+        //     label: "文章数量",
+        //     prop: "blogsStrs",
+        //     slotName: 'blogsStrs'
+        // },
         {
             label: '操作',
             slotName: 'handler'

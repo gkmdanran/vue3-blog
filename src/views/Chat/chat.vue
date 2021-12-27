@@ -20,7 +20,7 @@
           <base-button
             type="danger"
             size="small"
-            :disabled="!delIds"
+            :disabled="!delIds.length"
             :confirm="{ message: '确认删除选中的留言吗？' }"
             @confirmClick="confirmDelChats"
             >批量删除</base-button
@@ -31,8 +31,8 @@
             scope.row.chatWay == "：" ? "暂无" : scope.row.chatWay
           }}</span>
         </template>
-        <template #createTime="scope">
-          <span>{{ $filters.formatTime(scope.row.createTime) }}</span>
+        <template #createAt="scope">
+          <span>{{ $filters.formatTime(scope.row.createAt) }}</span>
         </template>
       </base-table>
     </template>
@@ -44,14 +44,15 @@ import { IChatItem, ISearchForm } from "./type";
 import { tableJson, searchJson } from "./chatJson";
 import { getChat, delChats } from "@/http/chat";
 import { IPagination } from "@/base-ui/baseTable/src/type";
+import dayjs from "dayjs";
 export default defineComponent({
   name: "Chat",
   components: {},
   setup() {
     let searchForm = reactive<ISearchForm>({ queryPeople: "", queryDate: "" });
     const tableData = ref<IChatItem[]>([]);
-    const pagination = reactive<IPagination>({ page: 1, size: 5, total: 0 });
-    const delIds = ref<string>("");
+    const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
+    const delIds = ref<string[]>([]);
     function searchList() {
       getChat(
         searchForm.queryPeople,
@@ -67,15 +68,20 @@ export default defineComponent({
     }
 
     function changeForm(form: ISearchForm) {
-      searchForm = form;
+      searchForm = {
+        ...form,
+        queryDate: form.queryDate
+          ? dayjs(form.queryDate).format("YYYY-MM-DD")
+          : "",
+      };
       searchList();
     }
     function handleSelectionChange(rows: IChatItem[]) {
       var arrIds: string[] = [];
       rows.forEach((item) => {
-        arrIds.push(item._id);
+        arrIds.push(item.id);
       });
-      delIds.value = arrIds.join(",");
+      delIds.value = arrIds;
     }
     function confirmDelChats() {
       delChats(delIds.value).then((res) => {

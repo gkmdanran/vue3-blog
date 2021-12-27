@@ -83,7 +83,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeUnmount, watch } from "vue";
-import { WalletFilled } from "@element-plus/icons";
 import useFormateDate from "@/hooks/useFormateDate";
 import {
   useRouter,
@@ -94,7 +93,6 @@ import {
 import Cookies from "js-cookie";
 export default defineComponent({
   name: "HomePage",
-  components: { WalletFilled },
   setup() {
     const router: Router = useRouter();
     const route: RouteLocationNormalizedLoaded = useRoute();

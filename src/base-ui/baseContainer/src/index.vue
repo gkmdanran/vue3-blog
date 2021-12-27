@@ -9,13 +9,17 @@
         </template>
       </el-breadcrumb>
     </div>
-    <div class="card-box">
-      <div class="search_area">
-        <slot name="search"></slot>
-      </div>
-      <div class="table_area">
-        <slot name="table"></slot>
-      </div>
+    <div class="content">
+      <el-scrollbar>
+        <div class="card-box">
+          <div class="search_area">
+            <slot name="search"></slot>
+          </div>
+          <div class="table_area">
+            <slot name="table"></slot>
+          </div>
+        </div>
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -50,18 +54,20 @@ export default defineComponent({
       font-size: 18px;
     }
   }
-  .card-box{
+  .content {
     width: 100%;
-    min-height: 200px;
+    height: calc(100vh - 135px);
     border-radius: 15px;
-    box-shadow: 3px 3px 10px 3px rgba(0,0,0,.2);
+    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.2);
+  }
+  .card-box {
     padding: 15px;
   }
-  .search_area{
+  .search_area {
     border-bottom: 1px solid #eaeef2;
   }
-  .table_area{
-    margin-top:10px ;
+  .table_area {
+    margin-top: 10px;
   }
 }
 </style>

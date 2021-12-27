@@ -1,7 +1,9 @@
 <template>
   <div class="base-table">
     <div class="base-header">
-      <div class="title" v-if="tableJson.title">{{tableJson.title||''}}</div>
+      <div class="title" v-if="tableJson.title">
+        {{ tableJson.title || "" }}
+      </div>
       <div class="button_area">
         <slot name="topHandler"></slot>
       </div>
@@ -9,7 +11,7 @@
     <el-table
       ref="baseTable"
       :data="tableData"
-      style="width: 100%"
+      style="width: 100%;"
       v-bind="customAttrs"
     >
       <TableColumn
@@ -103,6 +105,9 @@ export default defineComponent({
 });
 </script>
 <style lang="less" scoped>
+/deep/ .el-table .el-table__cell {
+  padding: 5px 0 !important;
+}
 .base-table {
   .base-footer {
     display: flex;
@@ -114,7 +119,7 @@ export default defineComponent({
     justify-content: space-between;
     padding: 0 5px;
     align-items: center;
-    .title{
+    .title {
       color: #333333;
       font-size: 18px;
       padding: 10px 0;

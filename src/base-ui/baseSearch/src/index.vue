@@ -107,7 +107,7 @@ export default defineComponent({
         }
         timeout = window.setTimeout(() => {
           fn();
-        }, 500);
+        }, 300);
       };
     }
     const debounceEmit = debounce(() => {

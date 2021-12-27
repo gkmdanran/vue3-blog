@@ -20,8 +20,8 @@ export const tableJson = {
         },
         {
             label:"发言时间",
-            prop:"createTime",
-            slotName:"createTime"
+            prop:"createAt",
+            slotName:"createAt"
         },
     ],
 
