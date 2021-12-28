@@ -4,7 +4,8 @@
   >
     <template #search>
       <base-search
-        :form-json="searchJson"
+        label-width="70px"
+        :search-json="searchJson"
         @changeForm="changeForm"
       ></base-search>
     </template>
@@ -12,7 +13,7 @@
       <base-table
         border
         stripe
-        :table-data="tableData"
+        :data="tableData"
         :table-json="tableJson"
         v-model:pagination="pagination"
         @changePagination="searchList"

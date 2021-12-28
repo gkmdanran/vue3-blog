@@ -1,21 +1,24 @@
 <template>
-  <el-form class="km-search-form" v-bind="formJson.formAttributes">
+  <el-form class="km-search-form" v-bind="customAttrs">
     <el-row>
       <el-col
-        v-for="item in formJson.formItems"
+        :style="`width:${
+          item.layout && typeof item.layout == 'string' && item.layout
+        }`"
+        v-for="(item, key) in searchJson.searchItems || {}"
         :xl="(item.layout && item.layout.xl) || 4"
         :lg="(item.layout && item.layout.lg) || 6"
         :md="(item.layout && item.layout.md) || 8"
         :sm="(item.layout && item.layout.sm) || 12"
         :xs="(item.layout && item.layout.xs) || 24"
-        :key="item.prop"
+        :key="key"
       >
         <el-form-item
           :label="item.label + '：'"
-          :prop="item.prop"
+          :prop="key"
           :style="
-            formJson.itemStyle
-              ? formJson.itemStyle
+            searchJson.itemStyle
+              ? searchJson.itemStyle
               : 'margin-right:10px;margin-bottom:15px'
           "
         >
@@ -23,24 +26,23 @@
             v-if="item.type === 'input'"
             clearable
             :placeholder="item.placeholder || `请输入${item.label}`"
-            :size="formJson.size || ''"
             style="width: 100%"
-            v-bind="item.options || {}"
-            :model-value="initForm[`${item.prop}`]"
-            @update:modelValue="handleValueChange($event, item)"
+            v-bind="item.attrs || {}"
+            :model-value="initForm[key]"
+            @update:modelValue="handleValueChange($event, key, item)"
           />
           <el-select
             v-else-if="item.type === 'select'"
             clearable
             :placeholder="item.placeholder || `请选择${item.label}`"
             style="width: 100%"
-            :size="formJson.size || ''"
-            v-bind="item.options || {}"
-            :model-value="initForm[`${item.prop}`]"
-            @update:modelValue="handleValueChange($event, item)"
+            v-bind="item.attrs || {}"
+            :model-value="initForm[key]"
+            @update:modelValue="handleValueChange($event, key, item)"
           >
             <el-option
               v-for="opt in item.selectOptions"
+              v-bind="opt"
               :key="
                 opt[(item.selectProps && item.selectProps.label) || 'label']
               "
@@ -56,22 +58,20 @@
             v-else-if="item.type === 'time'"
             clearable
             :placeholder="item.placeholder || `请选择${item.label}`"
-            :size="formJson.size || ''"
             style="width: 100%"
-            v-bind="item.options || {}"
-            :model-value="initForm[`${item.prop}`]"
-            @update:modelValue="handleValueChange($event, item)"
+            v-bind="item.attrs || {}"
+            :model-value="initForm[key]"
+            @update:modelValue="handleValueChange($event, key, item)"
           >
           </el-time-picker>
           <el-date-picker
-            v-else-if="item.type === 'date' || 'datetime'"
+            v-else-if="item.type === 'date' || item.type === 'datetime'"
             clearable
             :placeholder="item.placeholder || `请选择${item.label}`"
-            :size="formJson.size || ''"
             style="width: 100%"
-            v-bind="item.options || {}"
-            :model-value="initForm[`${item.prop}`]"
-            @update:modelValue="handleValueChange($event, item)"
+            v-bind="item.attrs || {}"
+            :model-value="initForm[key]"
+            @update:modelValue="handleValueChange($event, key, item)"
           >
           </el-date-picker>
         </el-form-item>
@@ -81,11 +81,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, getCurrentInstance } from "vue";
 export default defineComponent({
   name: "baseSearch",
   props: {
-    formJson: {
+    searchJson: {
       type: Object,
       required: true,
     },
@@ -93,10 +93,14 @@ export default defineComponent({
   emits: ["changeForm"],
   components: {},
   setup(props, { emit }) {
+    const instance = getCurrentInstance();
+    const customAttrs = reactive({
+      ...instance?.attrs,
+    });
     //初始化表单
     const initForm = reactive<any>({});
-    for (let item of props.formJson.formItems) {
-      initForm[item.prop] = "";
+    for (let key in props.searchJson.searchItems) {
+      initForm[key] = "";
     }
     //输入框防抖函数
     function debounce(fn: Function) {
@@ -112,11 +116,10 @@ export default defineComponent({
     }
     const debounceEmit = debounce(() => {
       emit("changeForm", initForm);
-      console.log(initForm);
     });
 
-    function handleValueChange(val: any, item: any) {
-      initForm[`${item.prop}`] = val;
+    function handleValueChange(val: any, key: string, item: any) {
+      initForm[key] = val;
       if (item.type == "input") {
         debounceEmit();
       } else {
@@ -124,6 +127,7 @@ export default defineComponent({
       }
     }
     return {
+      customAttrs,
       initForm,
       handleValueChange,
     };
@@ -137,11 +141,6 @@ export default defineComponent({
   }
   /deep/ .el-form-item {
     margin-bottom: 0px;
-  }
-  .button_area {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
   }
 }
 </style>

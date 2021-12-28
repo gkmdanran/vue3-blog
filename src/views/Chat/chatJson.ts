@@ -1,9 +1,9 @@
 export const tableJson = {
-    title:'留言列表',
+    title: '留言列表',
     columns: [
         {
-            type:'selection',
-            width:50
+            type: 'selection',
+            width: 50
         },
         {
             label: '留言人',
@@ -14,32 +14,27 @@ export const tableJson = {
             prop: "chatContent",
         },
         {
-            label:"联系方式",
-            prop:"chatWay",
-            slotName:"chatWay"
+            label: "联系方式",
+            prop: "chatWay",
+            slotName: "chatWay"
         },
         {
-            label:"发言时间",
-            prop:"createAt",
-            slotName:"createAt"
+            label: "发言时间",
+            prop: "createAt",
+            slotName: "createAt"
         },
     ],
 
 }
 export const searchJson = {
-    formAttributes: {
-        labelWidth: "70px",
-    },
-    formItems: [
-        {
-            prop: "queryPeople",
+    searchItems: {
+        queryPeople: {
             label: "留言人",
             type: "input",
         },
-        {
-            prop: "queryDate",
+        queryDate: {
             label: "留言时间",
             type: "date",
-        },
-    ],
+        }
+    }
 }

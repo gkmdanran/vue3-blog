@@ -78,12 +78,14 @@
         <router-view></router-view>
       </el-scrollbar>
     </el-container>
+    <change-password v-model:visible="showChange"></change-password>
   </el-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onBeforeUnmount, watch } from "vue";
+import { defineComponent, ref, onBeforeUnmount, watch, reactive } from "vue";
 import useFormateDate from "@/hooks/useFormateDate";
+import changePassword from "./cmp/changePassword.vue";
 import {
   useRouter,
   Router,
@@ -93,6 +95,9 @@ import {
 import Cookies from "js-cookie";
 export default defineComponent({
   name: "HomePage",
+  components: {
+    changePassword,
+  },
   setup() {
     const router: Router = useRouter();
     const route: RouteLocationNormalizedLoaded = useRoute();
@@ -141,6 +146,7 @@ export default defineComponent({
       activeIndex,
       isCollapse,
       currentTime,
+      showChange,
       changeCollapse,
       handleCommand,
     };

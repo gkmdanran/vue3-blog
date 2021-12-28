@@ -3,14 +3,18 @@
     :breadcrumbs="[{ name: '首页', path: '/home' }, { name: '留言管理' }]"
   >
     <template #search>
-      <base-search :form-json="searchJson" @changeForm="changeForm">
+      <base-search
+        :search-json="searchJson"
+        @changeForm="changeForm"
+        label-width="70px"
+      >
       </base-search>
     </template>
     <template #table>
       <base-table
         border
         stripe
-        :table-data="tableData"
+        :data="tableData"
         :table-json="tableJson"
         v-model:pagination="pagination"
         @changePagination="searchList"

@@ -10,8 +10,7 @@
     </div>
     <el-table
       ref="baseTable"
-      :data="tableData"
-      style="width: 100%;"
+      style="width: 100%"
       v-bind="customAttrs"
     >
       <TableColumn
@@ -56,10 +55,6 @@ export default defineComponent({
     tableJson: {
       type: Object as PropType<ITable>,
       required: true,
-    },
-    tableData: {
-      type: Array,
-      default: () => [],
     },
     pagination: {
       type: Object as PropType<IPagination>,
