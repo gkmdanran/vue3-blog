@@ -11,6 +11,7 @@
     <el-table
       ref="baseTable"
       style="width: 100%"
+      :data="data"
       v-bind="customAttrs"
     >
       <TableColumn
@@ -54,6 +55,10 @@ export default defineComponent({
   props: {
     tableJson: {
       type: Object as PropType<ITable>,
+      required: true,
+    },
+    data: {
+      type: Array,
       required: true,
     },
     pagination: {

@@ -1,8 +1,12 @@
 <template>
-  <div>{{customAttrs}}
-    <el-dialog v-bind="customAttrs" :model-value="modelValue">
+  <div>
+    <el-dialog
+      v-bind="customAttrs"
+      :model-value="modelValue"
+      @close="handleClose"
+    >
       <el-form
-        :ref="form"
+        ref="formRef"
         :model="dialogForm"
         :label-width="
           (formJson.formAttributes && formJson.formAttributes.labelWidth) ||
@@ -29,8 +33,7 @@
                 :placeholder="item.placeholder || `请输入${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               />
               <el-input-number
                 v-else-if="item.type === 'inputNumber'"
@@ -38,8 +41,7 @@
                 :placeholder="item.placeholder || `请输入${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               />
               <el-select
                 v-else-if="item.type === 'select'"
@@ -47,8 +49,7 @@
                 :placeholder="item.placeholder || `请选择${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               >
                 <el-option
                   v-for="opt in item.selectOptions || []"
@@ -70,8 +71,7 @@
                 :placeholder="item.placeholder || `请选择${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               >
                 <template v-for="opt in item.selectOptions || []">
                   <el-radio
@@ -122,8 +122,7 @@
                 :placeholder="item.placeholder || `请选择${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               >
                 <template v-for="opt in item.selectOptions || []">
                   <el-checkbox
@@ -172,8 +171,7 @@
                 :placeholder="item.placeholder || `请选择${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               >
               </el-time-picker>
               <el-date-picker
@@ -182,8 +180,7 @@
                 :placeholder="item.placeholder || `请选择${item.label}`"
                 style="width: 100%"
                 v-bind="item.attrs || {}"
-                :model-value="dialogForm[key]"
-                @update:dialogForm="handleValueChange($event, key)"
+                v-model="dialogForm[key]"
               >
               </el-date-picker>
             </el-form-item>
@@ -192,11 +189,9 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button
-            v-if="cancelText"
-            @click="$emit('update:modelValue', false)"
-            >{{ cancelText }}</el-button
-          >
+          <el-button v-if="cancelText" @click="handleClose">{{
+            cancelText
+          }}</el-button>
           <el-button type="primary" @click="submitForm">{{
             confrimText
           }}</el-button>
@@ -207,15 +202,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, getCurrentInstance } from "vue";
+import { defineComponent, reactive, ref, getCurrentInstance, watch } from "vue";
 import { ElForm } from "element-plus";
 export default defineComponent({
   inheritAttrs: false,
   name: "baseDialogForm",
   props: {
-    modelValue:{
-      required:true,
-      type:Boolean,
+    modelValue: {
+      required: true,
+      type: Boolean,
     },
     dialogForm: {
       required: true,
@@ -234,16 +229,28 @@ export default defineComponent({
       default: "取 消",
     },
   },
-  emits: ["update:modelValue", "success", "error", "update:dialogForm"],
+  emits: ["update:modelValue", "success", "error",],
   components: {},
   setup(props, { emit }) {
     const instance = getCurrentInstance();
     const customAttrs = reactive({
       ...instance?.attrs,
     });
-    const form = ref<InstanceType<typeof ElForm>>();
+    const formRef = ref<InstanceType<typeof ElForm>>();
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (v) {
+          formRef.value?.clearValidate();
+        }
+      }
+    );
+    function handleClose() {
+      formRef.value?.resetFields();
+      emit("update:modelValue", false);
+    }
     function submitForm() {
-      form.value?.validate((valid: boolean | undefined) => {
+      formRef.value?.validate((valid: boolean | undefined) => {
         if (valid) {
           emit("success", { ...props.dialogForm });
         } else {
@@ -252,14 +259,12 @@ export default defineComponent({
         }
       });
     }
-    function handleValueChange(val: any, key: string) {
-      emit("update:dialogForm", { ...props.dialogForm, [key]: val });
-    }
+
     return {
       customAttrs,
-      form,
-      handleValueChange,
+      formRef,
       submitForm,
+      handleClose,
     };
   },
 });

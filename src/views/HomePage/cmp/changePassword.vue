@@ -1,14 +1,22 @@
 <template>
   <base-dialog-form
+    title="修改密码"
+    width="400px"
     v-model:dialogForm="searchForm"
-    @close="$emit('update:visible', false)"
-    v-model="visible"
+    :modelValue="visible"
+    @update:modelValue="$emit('update:visible', false)"
     :form-json="dialogJson"
+    @success="submitForm"
   ></base-dialog-form>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
+import { IPasswordForm } from "./type";
+import { changePassword } from "@/http/login";
+import { ElMessage } from "element-plus";
+import { useRouter, Router } from "vue-router";
+import Cookies from "js-cookie";
 export default defineComponent({
   name: "changePassword",
   props: {
@@ -17,6 +25,7 @@ export default defineComponent({
       type: Boolean,
     },
   },
+  emits: ["update:visible", "success"],
   setup() {
     const dialogJson = {
       formAttributes: {
@@ -26,19 +35,28 @@ export default defineComponent({
             {
               required: true,
               message: "请输入旧密码",
+              trigger: "blur",
             },
           ],
           newPassword: [
             {
               required: true,
-              message: "请输入旧密码",
+              message: "请输入密码",
+              trigger: "blur",
+            },
+            {
+              pattern: /^[a-zA-z0-9]{6,18}$/,
+              message: "请输入6-18位的英文或数字",
+              trigger: "blur",
             },
           ],
           confirmPassword: [
             {
               required: true,
-              message: "请输入旧密码",
+              message: "请确认新密码",
+              trigger: "blur",
             },
+            { validator: confirm, trigger: "blur" },
           ],
         },
       },
@@ -62,18 +80,40 @@ export default defineComponent({
           label: "确认密码",
           attrs: {
             type: "password",
+            placeholder: "请确认密码",
           },
         },
       },
     };
-    let searchForm = reactive<any>({
+    const router: Router = useRouter();
+    let searchForm = reactive<IPasswordForm>({
       oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     });
+    function confirm(rule: any, value: string, callback: Function) {
+      if (value != searchForm.newPassword) {
+        callback(new Error("两次密码需要一致"));
+      } else {
+        callback();
+      }
+    }
+    function submitForm(form: IPasswordForm) {
+      changePassword(form.oldPassword, form.newPassword).then((res) => {
+        if (res.code == 200) {
+          ElMessage({
+            type: "success",
+            message: "修改成功，请重新登录！",
+          });
+          Cookies.set("blog_token", "");
+          router.push("/");
+        }
+      });
+    }
     return {
       dialogJson,
       searchForm,
+      submitForm,
     };
   },
 });

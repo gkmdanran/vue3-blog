@@ -1,4 +1,6 @@
 import { App } from 'vue'
+import { ElMessage } from 'element-plus'
+import { MessageParams } from 'element-plus/lib/components/message/src/message'
 export default function registerProperties(app: App) {
     app.config.globalProperties.$filters = {
         formatTime(value: string): string {
@@ -11,5 +13,8 @@ export default function registerProperties(app: App) {
             const s: number | string = (dt.getSeconds() + '').padStart(2, '0')
             return `${y}-${m}-${d} ${h}:${mm}:${s}`
         }
+    }
+    app.config.globalProperties.$message = function (config: MessageParams | undefined) {
+        ElMessage(config)
     }
 }

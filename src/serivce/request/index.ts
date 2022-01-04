@@ -63,7 +63,7 @@ class HYRequest {
             }
             if (config.showLoading === true) {
                 this.showLoading = true
-            }else{
+            } else {
                 this.showLoading = false
             }
             this.instance
@@ -94,6 +94,10 @@ class HYRequest {
 
     delete<T>(config: HYRequestConfig<T>): Promise<T> {
         return this.request<T>({ ...config, method: 'DELETE' })
+    }
+
+    put<T>(config: HYRequestConfig<T>): Promise<T> {
+        return this.request<T>({ ...config, method: 'PUT' })
     }
 
     patch<T>(config: HYRequestConfig<T>): Promise<T> {
