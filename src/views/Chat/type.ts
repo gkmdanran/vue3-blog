@@ -3,7 +3,7 @@ export interface IChatItem {
     chatName: string,
     chatContent: string,
     chatWay: string,
-    createTime: string,
+    createAt: string,
 }
 export interface ISearchForm {
     queryPeople: string 

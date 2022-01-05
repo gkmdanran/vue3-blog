@@ -106,7 +106,7 @@ export default defineComponent({
 </script>
 <style lang="less" scoped>
 /deep/ .el-table .el-table__cell {
-  padding: 5px 0 !important;
+  padding: 10px 0 !important;
 }
 .base-table {
   .base-footer {

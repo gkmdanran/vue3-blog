@@ -86,6 +86,7 @@ export default defineComponent({
     }
     function changeForm(form: ISearchForm) {
       searchForm = form;
+      pagination.page = 1;
       searchList();
     }
     function checkArticle(id: string) {

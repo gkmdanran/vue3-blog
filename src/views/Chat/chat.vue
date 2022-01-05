@@ -78,6 +78,7 @@ export default defineComponent({
           ? dayjs(form.queryDate).format("YYYY-MM-DD")
           : "",
       };
+      pagination.page = 1;
       searchList();
     }
     function handleSelectionChange(rows: IChatItem[]) {

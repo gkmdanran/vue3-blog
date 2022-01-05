@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/HomePage/homepage.vue'),
     children: [
       {
-        path: '/tags',
+        path: '/tag',
         name: 'Tag',
         component: () => import('../views/Tag/tag.vue')
       },
@@ -30,6 +30,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/filelists',
         name: 'File',
         component: () => import('../views/File/file.vue')
+      },
+      {
+        path: '/article',
+        name: 'Article',
+        component: () => import('../views/Article/article.vue')
       },
     ]
   },

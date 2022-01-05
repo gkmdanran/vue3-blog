@@ -13,7 +13,7 @@
           <i class="el-icon-s-fold" v-show="isCollapse == false"></i>
           <i class="el-icon-s-unfold" v-show="isCollapse == true"></i>
         </div>
-        <el-menu-item index="/tags">
+        <el-menu-item index="/tag">
           <i class="el-icon-paperclip"></i>
           <span>标签管理</span>
         </el-menu-item>
@@ -33,14 +33,14 @@
           <i class="el-icon-goods"></i>
           <span>皮肤管理</span>
         </el-menu-item>
-        <el-menu-item index="/filelists">
+        <!-- <el-menu-item index="/filelists">
           <i class="el-icon-folder-opened"></i>
           <span>文件清理</span>
         </el-menu-item>
         <el-menu-item index="/music">
           <i class="el-icon-headset"></i>
           <span>音乐管理</span>
-        </el-menu-item>
+        </el-menu-item> -->
       </el-menu>
     </el-aside>
     <el-container>
