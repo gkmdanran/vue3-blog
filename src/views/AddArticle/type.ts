@@ -3,7 +3,6 @@ export interface IArticleForm {
     link: string,
     title: string,
     tagList: ITagItem[],
-    content: string,
-    contentText: string,
+    description: string,
     mdValue: string,
 }

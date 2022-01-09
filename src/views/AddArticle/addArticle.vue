@@ -18,7 +18,7 @@
           style="margin-right: 10px"
         ></el-input>
         <div class="btns">
-          <el-button type="primary">保存博客</el-button>
+          <el-button type="primary" @click="saveToSession">保存博客</el-button>
           <el-button type="success" @click="verifyForm">发布博客</el-button>
         </div>
       </div>
@@ -37,55 +37,66 @@
         </div>
         <div class="btns"></div>
       </div>
+      <editor @save="saveToSession" @change="changeMarkdown" />
     </template>
   </base-container>
 </template>
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
 import AddTag from "./cmp/AddTag/addtag.vue";
+import Editor from "./cmp/Editor/editor.vue";
 import { ITagItem } from "@/views/Tag/type";
 import { IArticleForm } from "./type";
 import { ElMessage } from "element-plus";
+import { addArticle } from "@/http/article";
 export default defineComponent({
   name: "Article",
-  components: { AddTag },
+  components: { AddTag, Editor },
   setup() {
     const articleForm = reactive<IArticleForm>({
       link: "",
       title: "",
       tagList: [],
-      content: "",
-      contentText: "",
+      description: "",
       mdValue: "",
     });
     function changeTag(list: ITagItem[]) {
       articleForm.tagList = list;
     }
+    function saveToSession() {
+      console.log("save");
+    }
+    function changeMarkdown(value: string, desc: string) {
+      articleForm.mdValue = value;
+      articleForm.description = desc;
+    }
     function verifyForm() {
-      if (!articleForm.title)
-        return ElMessage({
-          type: "warning",
-          message: "请填写博客标题",
-        });
-      if (articleForm.tagList.length == 0)
-        return ElMessage({
-          type: "warning",
-          message: "至少选择一个标签",
-        });
-      if (!articleForm.mdValue)
-        return ElMessage({
-          type: "warning",
-          message: "请填写博客内容",
-        });
+      // if (!articleForm.title)
+      //   return ElMessage({
+      //     type: "warning",
+      //     message: "请填写博客标题",
+      //   });
+      // if (articleForm.tagList.length == 0)
+      //   return ElMessage({
+      //     type: "warning",
+      //     message: "至少选择一个标签",
+      //   });
+      // if (!articleForm.mdValue)
+      //   return ElMessage({
+      //     type: "warning",
+      //     message: "请填写博客内容",
+      //   });
       submitForm();
     }
     function submitForm() {
-      console.log(articleForm);
+      addArticle(articleForm);
     }
     return {
       articleForm,
       changeTag,
+      changeMarkdown,
       verifyForm,
+      saveToSession,
     };
   },
 });

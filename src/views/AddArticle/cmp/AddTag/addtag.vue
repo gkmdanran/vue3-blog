@@ -71,6 +71,7 @@ export default defineComponent({
           getTagList();
           addSelectTag(res.data);
           inputVisible.value = false;
+          newTagValue.value = "";
         }
       });
     }
