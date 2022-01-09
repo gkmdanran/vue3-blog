@@ -7,11 +7,11 @@ export const tableJson = {
             prop: "name",
             slotName: 'tagName'
         },
-        // {
-        //     label: "文章数量",
-        //     prop: "blogsStrs",
-        //     slotName: 'blogsStrs'
-        // },
+        {
+            label: "文章数量",
+            prop: "count",
+            slotName: 'count'
+        },
         {
             label: '操作',
             slotName: 'handler'

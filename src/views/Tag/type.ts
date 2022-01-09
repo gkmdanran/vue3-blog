@@ -1,5 +1,5 @@
 export interface ITagItem {
-    id: number,
+    id?: number,
     name: string,
     count?: string,
     type: string,

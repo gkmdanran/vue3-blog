@@ -1,6 +1,6 @@
 <template>
   <base-container
-    :breadcrumbs="[{ name: '首页', path: '/home' }, { name: '留言管理' }]"
+    :breadcrumbs="[{ name: '首页', path: '/home' }, { name: '文章管理' }]"
   >
     <template #search>
       <base-search
@@ -21,7 +21,7 @@
         @selection-change="handleSelectionChange"
       >
         <template #topHandler>
-          <el-button type="primary" size="small">写博客</el-button>
+          <el-button type="primary" size="small" @click="$router.push('/article/add')">写博客</el-button>
           <base-button
             type="danger"
             size="small"

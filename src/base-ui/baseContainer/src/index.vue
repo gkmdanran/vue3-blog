@@ -18,6 +18,9 @@
           <div class="table_area">
             <slot name="table"></slot>
           </div>
+          <div class="other">
+            <slot name="other"></slot>
+          </div>
         </div>
       </el-scrollbar>
     </div>
@@ -57,7 +60,6 @@ export default defineComponent({
   .content {
     width: 100%;
     height: calc(100vh - 135px);
-    border-radius: 15px;
     box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.2);
   }
   .card-box {

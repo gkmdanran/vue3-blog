@@ -21,20 +21,16 @@
         <template #tagName="scope">
           <el-tag :type="scope.row.type">{{ scope.row.name }}</el-tag>
         </template>
-        <!-- <template #blogsStrs="scope">
+        <template #count="scope">
           <span
             :style="{
-              color: scope.row.blogsStrs == '' ? 'red' : 'black',
+              color: scope.row.count == 0 ? 'red' : 'black',
               fontSize: '22px',
               marginRight: '2px',
             }"
-            >{{
-              scope.row.blogsStrs == ""
-                ? 0
-                : scope.row.blogsStrs.split(",").length
-            }}</span
+            >{{ scope.row.count }}</span
           >篇
-        </template> -->
+        </template>
         <template #handler="scope">
           <base-button
             type="text"
