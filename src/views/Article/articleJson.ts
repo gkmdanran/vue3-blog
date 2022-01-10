@@ -2,10 +2,6 @@ export const tableJson = {
     title: '文章列表',
     columns: [
         {
-            type:'selection',
-            widrh:50,
-        },
-        {
             label: '文章标题',
             prop: 'title',
             showOverflowTooltip: true
@@ -34,7 +30,7 @@ export const tableJson = {
             label: "发表时间",
             prop: "createAt",
             slotName: "createAt",
-            width:160
+            width:170
         },
         {
             width:200,

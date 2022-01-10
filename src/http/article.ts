@@ -12,11 +12,11 @@ export function getArticle(title: string, tag: number, page: number, size: numbe
         }
     })
 }
-export function delArticles(ids: string[]): Promise<IDataType> {
+export function delArticle(id: string): Promise<IDataType> {
     return hyRequest.delete<IDataType>({
         url: `/article/del`,
         data: {
-            ids
+            id
         }
     })
 }

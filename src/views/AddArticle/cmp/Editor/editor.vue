@@ -6,6 +6,7 @@
 import { defineComponent, ref,  } from "vue";
 
 export default defineComponent({
+  inheritAttrs:false,
   name: "Editor",
   emits: ["change"],
   setup(_, { emit }) {

@@ -18,17 +18,13 @@
         :table-json="tableJson"
         v-model:pagination="pagination"
         @changePagination="searchList"
-        @selection-change="handleSelectionChange"
       >
         <template #topHandler>
-          <el-button type="primary" size="small" @click="$router.push('/article/add')">写博客</el-button>
-          <base-button
-            type="danger"
+          <el-button
+            type="primary"
             size="small"
-            :disabled="!delIds.length"
-            :confirm="{ message: '确认删除选中的留言吗？' }"
-            @confirmClick="confirmDelArticles"
-            >批量删除</base-button
+            @click="$router.push('/article/add')"
+            >写博客</el-button
           >
         </template>
         <template #star="scope">
@@ -91,7 +87,7 @@ import { defineComponent, ref, reactive } from "vue";
 import { tableJson, searchJson } from "./articleJson";
 import {
   getArticle,
-  delArticles,
+  delArticle,
   changeTopStatus,
   changeHideStatus,
 } from "@/http/article";
@@ -102,20 +98,8 @@ export default defineComponent({
   components: {},
   setup() {
     let searchForm = reactive<ISearchForm>({ title: "", tag: -1 });
-    const tableData = ref<IArticleItem[]>([
-      {
-        id: "1",
-        title: "1",
-        description: "22",
-        star: 1000,
-        createAt: "2021-10-21",
-        tag: [],
-        isTop: 0,
-        isHide: 1,
-      },
-    ]);
+    const tableData = ref<IArticleItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
-    const delIds = ref<string[]>([]);
     function searchList() {
       getArticle(
         searchForm.title,
@@ -135,22 +119,9 @@ export default defineComponent({
       pagination.page = 1;
       searchList();
     }
-    function handleSelectionChange(rows: IArticleItem[]) {
-      var arrIds: string[] = [];
-      rows.forEach((item) => {
-        arrIds.push(item.id);
-      });
-      delIds.value = arrIds;
-    }
-    function confirmDelArticles() {
-      delArticles(delIds.value).then((res) => {
-        if (res.code == 200) {
-          searchList();
-        }
-      });
-    }
+
     function confirmDelArticle(row: IArticleItem) {
-      delArticles([row.id]).then((res) => {
+      delArticle(row.id).then((res) => {
         if (res.code == 200) {
           searchList();
         }
@@ -177,14 +148,11 @@ export default defineComponent({
       tableJson,
       searchJson,
       pagination,
-      delIds,
-      confirmDelArticles,
       confirmDelArticle,
       confirmHide,
       confirmTop,
       changeForm,
       searchList,
-      handleSelectionChange,
     };
   },
 });

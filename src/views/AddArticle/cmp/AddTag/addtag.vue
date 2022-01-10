@@ -42,17 +42,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, reactive, nextTick } from "vue";
+import { defineComponent, ref, PropType, nextTick } from "vue";
 import { getTag, addTag } from "@/http/tag";
 import { ITagItem } from "@/views/Tag/type";
 import { ElInput, ElMessage } from "element-plus";
 export default defineComponent({
   name: "AddTag",
   components: {},
-  emits: ["change"],
-  setup(_, { emit }) {
+  props: {
+    selectTag: {
+      type: Array as PropType<ITagItem[]>,
+      default: [],
+    },
+  },
+  emits: ["update:selectTag"],
+  setup(props, { emit }) {
     const tagList = ref<ITagItem[]>([]);
-    const selectTag = ref<ITagItem[]>([]);
     const inputVisible = ref<boolean>(false);
     const newTagValue = ref<string>("");
     const InputRef = ref<InstanceType<typeof ElInput>>();
@@ -83,25 +88,26 @@ export default defineComponent({
       });
     }
     function delSelectTag(index: number) {
-      selectTag.value.splice(index, 1);
-      emit("change", selectTag.value);
+      let selectTag: ITagItem[] = [...props.selectTag];
+      selectTag.splice(index, 1);
+      emit("update:selectTag", selectTag);
     }
     function addSelectTag(tag: ITagItem) {
-      if (selectTag.value.length >= 3)
+      if (props.selectTag.length >= 3)
         return ElMessage({
           type: "warning",
           message: "最多添加3个标签！",
         });
-      if (selectTag.value.find((item) => item.name == tag.name)) return;
-      selectTag.value.push(tag);
-      emit("change", selectTag.value);
+      if (props.selectTag.find((item) => item.name == tag.name)) return;
+      let selectTag: ITagItem[] = [...props.selectTag];
+      selectTag.push(tag);
+      emit("update:selectTag", selectTag);
     }
 
     getTagList();
     return {
       newTagValue,
       tagList,
-      selectTag,
       InputRef,
       inputVisible,
       showInput,

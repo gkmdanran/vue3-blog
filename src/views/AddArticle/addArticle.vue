@@ -7,7 +7,8 @@
     ]"
     class="add-article"
   >
-    <template #other>
+    <template #other
+      >{{ articleForm }}
       <div class="form-item">
         <div class="label">
           <span class="required">*</span>
@@ -33,7 +34,7 @@
       <div class="form-item start">
         <div class="label"><span class="required">*</span>博客标签:</div>
         <div class="tag-content">
-          <add-tag @change="changeTag"></add-tag>
+          <add-tag v-model:selectTag="articleForm.tagList"></add-tag>
         </div>
         <div class="btns"></div>
       </div>
@@ -45,55 +46,84 @@
 import { defineComponent, ref, reactive } from "vue";
 import AddTag from "./cmp/AddTag/addtag.vue";
 import Editor from "./cmp/Editor/editor.vue";
-import { ITagItem } from "@/views/Tag/type";
 import { IArticleForm } from "./type";
 import { ElMessage } from "element-plus";
 import { addArticle } from "@/http/article";
+import {
+  useRouter,
+  Router,
+  RouteLocationNormalizedLoaded,
+  useRoute,
+} from "vue-router";
 export default defineComponent({
   name: "Article",
   components: { AddTag, Editor },
   setup() {
-    const articleForm = reactive<IArticleForm>({
+    let articleForm = reactive<IArticleForm>({
       link: "",
       title: "",
       tagList: [],
       description: "",
       mdValue: "",
     });
-    function changeTag(list: ITagItem[]) {
-      articleForm.tagList = list;
-    }
+    const router: Router = useRouter();
+    const route: RouteLocationNormalizedLoaded = useRoute();
+
     function saveToSession() {
-      console.log("save");
+      window.localStorage.setItem("blog_draft", JSON.stringify(articleForm));
+      ElMessage({
+        type: "success",
+        message: "草稿已保存",
+      });
     }
     function changeMarkdown(value: string, desc: string) {
       articleForm.mdValue = value;
       articleForm.description = desc;
     }
     function verifyForm() {
-      // if (!articleForm.title)
-      //   return ElMessage({
-      //     type: "warning",
-      //     message: "请填写博客标题",
-      //   });
-      // if (articleForm.tagList.length == 0)
-      //   return ElMessage({
-      //     type: "warning",
-      //     message: "至少选择一个标签",
-      //   });
-      // if (!articleForm.mdValue)
-      //   return ElMessage({
-      //     type: "warning",
-      //     message: "请填写博客内容",
-      //   });
+      if (!articleForm.title)
+        return ElMessage({
+          type: "warning",
+          message: "请填写博客标题",
+        });
+      if (articleForm.tagList.length == 0)
+        return ElMessage({
+          type: "warning",
+          message: "至少选择一个标签",
+        });
+      if (!articleForm.mdValue)
+        return ElMessage({
+          type: "warning",
+          message: "请填写博客内容",
+        });
       submitForm();
     }
     function submitForm() {
-      addArticle(articleForm);
+      addArticle(articleForm).then((res) => {
+        if (res.code == 200) {
+          window.localStorage.setItem("blog_draft", "");
+          router.push("/article");
+        }
+      });
     }
+    function getDraft() {
+      let blog_draft: string = window.localStorage.getItem("blog_draft") || "";
+      if (blog_draft) {
+        try {
+          let form: IArticleForm = JSON.parse(blog_draft);
+          articleForm = reactive<IArticleForm>({ ...form });
+        } catch (error) {}
+      }
+    }
+    function initArticle() {
+      if (route.path == "article/edit") {
+      } else {
+        getDraft();
+      }
+    }
+    initArticle();
     return {
       articleForm,
-      changeTag,
       changeMarkdown,
       verifyForm,
       saveToSession,
