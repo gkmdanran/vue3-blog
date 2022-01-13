@@ -42,3 +42,11 @@ export function addArticle(articleForm: IArticleForm): Promise<IDataType> {
         data: articleForm
     })
 }
+export function getArticleDetail(id: string): Promise<IDataType> {
+    return hyRequest.get<IDataType>({
+        url: `/article/detail`,
+        params: {
+            id
+        }
+    })
+}

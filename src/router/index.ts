@@ -41,6 +41,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'AddArticle',
         component: () => import('../views/AddArticle/addArticle.vue')
       },
+      {
+        path: '/article/edit/:id',
+        name: 'EditArticle',
+        component: () => import('../views/AddArticle/addArticle.vue')
+      },
     ]
   },
 

@@ -38,7 +38,11 @@
         </div>
         <div class="btns"></div>
       </div>
-      <editor @save="saveToSession" @change="changeMarkdown" />
+      <editor
+        @save="saveToSession"
+        @getDescription="changeMarkdown"
+        v-model:mdValue="articleForm.mdValue"
+      />
     </template>
   </base-container>
 </template>
@@ -48,7 +52,7 @@ import AddTag from "./cmp/AddTag/addtag.vue";
 import Editor from "./cmp/Editor/editor.vue";
 import { IArticleForm } from "./type";
 import { ElMessage } from "element-plus";
-import { addArticle } from "@/http/article";
+import { addArticle, getArticleDetail } from "@/http/article";
 import {
   useRouter,
   Router,
@@ -76,8 +80,7 @@ export default defineComponent({
         message: "草稿已保存",
       });
     }
-    function changeMarkdown(value: string, desc: string) {
-      articleForm.mdValue = value;
+    function changeMarkdown(desc: string) {
       articleForm.description = desc;
     }
     function verifyForm() {
@@ -116,7 +119,12 @@ export default defineComponent({
       }
     }
     function initArticle() {
-      if (route.path == "article/edit") {
+      if (route.path.includes("article/edit")) {
+        getArticleDetail(String(route.params.id)).then((res) => {
+          if (res.code == 200) {
+            articleForm = res.data;
+          }
+        });
       } else {
         getDraft();
       }

@@ -49,7 +49,16 @@
           </span>
         </template>
         <template #handler="scope">
-          <el-button type="text">编辑</el-button>
+          <el-button
+            type="text"
+            @click="
+              $router.push({
+                name: 'EditArticle',
+                params: { id: scope.row.id },
+              })
+            "
+            >编辑</el-button
+          >
           <base-button
             type="text"
             :confirm="{ message: '确认删除吗？' }"

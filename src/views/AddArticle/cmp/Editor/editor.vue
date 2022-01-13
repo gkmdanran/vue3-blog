@@ -1,26 +1,34 @@
 
 <template>
-  <mavon-editor v-model="mdValue" @change="changeMd" @save="$emit('save')" />
+  <mavon-editor
+    :modelValue="mdValue"
+    @change="changeMd"
+    @save="$emit('save')"
+  />
 </template>
 <script lang="ts">
-import { defineComponent, ref,  } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  inheritAttrs:false,
+  props: {
+    mdValue: {
+      type: String,
+      default: "",
+    },
+  },
+  inheritAttrs: false,
   name: "Editor",
-  emits: ["change"],
+  emits: ["getDescription", "update:mdValue"],
   setup(_, { emit }) {
-    const mdValue = ref<string>("");
     function changeMd(value: string, render: string) {
       let description: string = render
         .replace(/<[^<>]+>/g, "")
         .replace(/[\r\n]/g, " ");
       console.log(value, description);
-      emit("change", value, description);
+      emit("getDescription", description);
+      emit("update:mdValue", value);
     }
-
     return {
-      mdValue,
       changeMd,
     };
   },
