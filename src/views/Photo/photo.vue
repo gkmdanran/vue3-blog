@@ -1,0 +1,110 @@
+<template>
+  <base-container
+    :breadcrumbs="[{ name: '首页', path: '/home' }, { name: '相册管理' }]"
+    class="photo"
+  >
+    <template #other>
+      <el-button
+        type="danger"
+        style="margin-left: 15px; width: 100px"
+        @click="managePhoto"
+        >管 理</el-button
+      >
+      <div class="lists">
+        <add-photo />
+        <photo-item
+          @delPhoto="delSuccess"
+          v-for="photo in photoList"
+          :key="photo.id"
+          :isDel="isDel"
+          :photo="photo"
+        ></photo-item>
+      </div>
+      <div class="footer">
+        <el-pagination
+          v-model:currentPage="page"
+          :page-size="10"
+          layout="total, prev, pager, next"
+          :total="total"
+          @current-change="handleCurrentChange"
+        >
+        </el-pagination>
+      </div>
+    </template>
+  </base-container>
+</template>
+<script lang="ts">
+import { defineComponent, ref, reactive } from "vue";
+import photoItem from "./cmp/photoItem.vue";
+import addPhoto from "./cmp/addPhoto.vue";
+import { getPhotos } from "@/http/photo";
+import { IPhoto } from "./type";
+export default defineComponent({
+  name: "Photo",
+  components: { photoItem, addPhoto },
+  setup() {
+    const isDel = ref<boolean>(false);
+    const total = ref<number>(0);
+    const page = ref<number>(1);
+    const photoList = ref<IPhoto[]>([
+      {
+        id: "1",
+        title: "测试",
+        count: 10,
+        tag: "旅游",
+        password: "22",
+        tagColor: "#cccccc",
+        cover:
+          "http://101.132.68.0:3000/uploads/o_2005140636202-1605682812635.jpg",
+        createAt: "2021-12-21",
+      },
+    ]);
+    function managePhoto() {
+      isDel.value = !isDel.value;
+    }
+    function handleCurrentChange(val: number) {
+      page.value = val;
+      getPhotoList();
+    }
+    function getPhotoList() {
+      getPhotos(page.value, 10).then((res) => {
+        if (res.code == 200) {
+          photoList.value = res.data.list;
+        }
+      });
+    }
+    function delSuccess() {
+      isDel.value = false;
+      page.value = 1;
+      getPhotoList();
+    }
+    getPhotoList();
+    return {
+      isDel,
+      total,
+      page,
+      photoList,
+      delSuccess,
+      managePhoto,
+      handleCurrentChange,
+    };
+  },
+});
+</script>
+<style lang="less" scoped>
+.photo {
+  /deep/.search_area {
+    border: none !important;
+  }
+  .lists {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .footer {
+    text-align: right;
+  }
+}
+</style>

@@ -21,7 +21,7 @@
           <i class="el-icon-notebook-2"></i>
           <span>文章管理</span>
         </el-menu-item>
-        <el-menu-item index="/picture">
+        <el-menu-item index="/photo">
           <i class="el-icon-picture"></i>
           <span>相册管理</span>
         </el-menu-item>

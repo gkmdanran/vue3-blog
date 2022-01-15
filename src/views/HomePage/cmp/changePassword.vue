@@ -2,7 +2,7 @@
   <base-dialog-form
     title="修改密码"
     width="400px"
-    v-model:dialogForm="searchForm"
+    v-model:dialogForm="passwordForm"
     :modelValue="visible"
     @update:modelValue="$emit('update:visible', false)"
     :form-json="dialogJson"
@@ -86,13 +86,13 @@ export default defineComponent({
       },
     };
     const router: Router = useRouter();
-    let searchForm = reactive<IPasswordForm>({
+    let passwordForm = reactive<IPasswordForm>({
       oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     });
     function confirm(rule: any, value: string, callback: Function) {
-      if (value != searchForm.newPassword) {
+      if (value != passwordForm.newPassword) {
         callback(new Error("两次密码需要一致"));
       } else {
         callback();
@@ -112,7 +112,7 @@ export default defineComponent({
     }
     return {
       dialogJson,
-      searchForm,
+      passwordForm,
       submitForm,
     };
   },

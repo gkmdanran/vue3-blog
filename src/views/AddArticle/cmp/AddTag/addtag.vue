@@ -52,7 +52,7 @@ export default defineComponent({
   props: {
     selectTag: {
       type: Array as PropType<ITagItem[]>,
-      default: [],
+      default: ()=>[],
     },
   },
   emits: ["update:selectTag"],
