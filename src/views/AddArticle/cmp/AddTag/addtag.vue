@@ -10,6 +10,8 @@
     >
 
     <el-input
+      clearable
+      maxlength="10"
       v-if="inputVisible"
       ref="InputRef"
       v-model.trim="newTagValue"
@@ -52,7 +54,7 @@ export default defineComponent({
   props: {
     selectTag: {
       type: Array as PropType<ITagItem[]>,
-      default: ()=>[],
+      default: () => [],
     },
   },
   emits: ["update:selectTag"],

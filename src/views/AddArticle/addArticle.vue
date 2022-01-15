@@ -14,7 +14,9 @@
           博客标题:
         </div>
         <el-input
+          clearable
           v-model.trim="articleForm.title"
+          maxlength="50"
           style="margin-right: 10px"
         ></el-input>
         <div class="btns">
@@ -30,6 +32,8 @@
       <div class="form-item">
         <div class="label">参考链接:</div>
         <el-input
+          clearable
+          maxlength="200"
           v-model.trim="articleForm.link"
           style="margin-right: 10px"
         ></el-input>

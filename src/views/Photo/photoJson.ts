@@ -15,7 +15,9 @@ export const addDialogJson = {
         title: {
             type: "input",
             label: "相册名",
-
+            attrs: {
+                maxlength: 50
+            }
         },
         tag: {
             type: "input",
