@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { loginInfo } from "./loginType";
+import { loginInfo } from "./type";
 import { accountLoginRequest } from "@/http/login";
 import { ElMessage } from "element-plus";
 import Cookies from "js-cookie";
