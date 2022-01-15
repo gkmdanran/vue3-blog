@@ -34,7 +34,7 @@
         <template #handler="scope">
           <base-button
             type="text"
-            @click="checkArticle(scope.row._id)"
+            @click="checkArticle(scope.row.id)"
             :disabled="scope.row.blogsStrs == ''"
             >查看文章</base-button
           >
@@ -87,8 +87,8 @@ export default defineComponent({
     }
     function checkArticle(id: string) {
       router.push({
-        name: "Article",
-        params: {
+        path: "/article",
+        query: {
           tagId: id,
         },
       });

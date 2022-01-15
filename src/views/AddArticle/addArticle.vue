@@ -7,26 +7,30 @@
     ]"
     class="add-article"
   >
-    <template #other
-      >{{ articleForm }}
+    <template #other>
       <div class="form-item">
         <div class="label">
           <span class="required">*</span>
           博客标题:
         </div>
         <el-input
-          v-model="articleForm.title"
+          v-model.trim="articleForm.title"
           style="margin-right: 10px"
         ></el-input>
         <div class="btns">
-          <el-button type="primary" @click="saveToSession">保存博客</el-button>
+          <el-button
+            type="primary"
+            @click="saveToSession"
+            v-if="$route.path.includes('article/add')"
+            >保存博客</el-button
+          >
           <el-button type="success" @click="verifyForm">发布博客</el-button>
         </div>
       </div>
       <div class="form-item">
         <div class="label">参考链接:</div>
         <el-input
-          v-model="articleForm.link"
+          v-model.trim="articleForm.link"
           style="margin-right: 10px"
         ></el-input>
         <div class="btns"></div>
@@ -52,7 +56,7 @@ import AddTag from "./cmp/AddTag/addtag.vue";
 import Editor from "./cmp/Editor/editor.vue";
 import { IArticleForm } from "./type";
 import { ElMessage } from "element-plus";
-import { addArticle, getArticleDetail } from "@/http/article";
+import { addArticle, getArticleDetail, editArticle } from "@/http/article";
 import {
   useRouter,
   Router,
@@ -63,7 +67,7 @@ export default defineComponent({
   name: "Article",
   components: { AddTag, Editor },
   setup() {
-    let articleForm = reactive<IArticleForm>({
+    let articleForm = ref<IArticleForm>({
       link: "",
       title: "",
       tagList: [],
@@ -74,27 +78,34 @@ export default defineComponent({
     const route: RouteLocationNormalizedLoaded = useRoute();
 
     function saveToSession() {
-      window.localStorage.setItem("blog_draft", JSON.stringify(articleForm));
-      ElMessage({
-        type: "success",
-        message: "草稿已保存",
-      });
+      if (route.params.id && route.path.includes("article/edit")) {
+        verifyForm();
+      } else {
+        window.localStorage.setItem(
+          "blog_draft",
+          JSON.stringify(articleForm.value)
+        );
+        ElMessage({
+          type: "success",
+          message: "草稿已保存",
+        });
+      }
     }
     function changeMarkdown(desc: string) {
-      articleForm.description = desc;
+      articleForm.value.description = desc;
     }
     function verifyForm() {
-      if (!articleForm.title)
+      if (!articleForm.value.title)
         return ElMessage({
           type: "warning",
           message: "请填写博客标题",
         });
-      if (articleForm.tagList.length == 0)
+      if (articleForm.value.tagList.length == 0)
         return ElMessage({
           type: "warning",
           message: "至少选择一个标签",
         });
-      if (!articleForm.mdValue)
+      if (!articleForm.value.mdValue)
         return ElMessage({
           type: "warning",
           message: "请填写博客内容",
@@ -102,19 +113,28 @@ export default defineComponent({
       submitForm();
     }
     function submitForm() {
-      addArticle(articleForm).then((res) => {
-        if (res.code == 200) {
-          window.localStorage.setItem("blog_draft", "");
-          router.push("/article");
-        }
-      });
+      if (route.params.id && route.path.includes("article/edit")) {
+        editArticle(String(route.params.id), articleForm.value).then((res) => {
+          if (res.code == 200) {
+            window.localStorage.setItem("blog_draft", "");
+            router.push("/article");
+          }
+        });
+      } else {
+        addArticle(articleForm.value).then((res) => {
+          if (res.code == 200) {
+            window.localStorage.setItem("blog_draft", "");
+            router.push("/article");
+          }
+        });
+      }
     }
     function getDraft() {
       let blog_draft: string = window.localStorage.getItem("blog_draft") || "";
       if (blog_draft) {
         try {
           let form: IArticleForm = JSON.parse(blog_draft);
-          articleForm = reactive<IArticleForm>({ ...form });
+          articleForm.value = form;
         } catch (error) {}
       }
     }
@@ -122,7 +142,7 @@ export default defineComponent({
       if (route.path.includes("article/edit")) {
         getArticleDetail(String(route.params.id)).then((res) => {
           if (res.code == 200) {
-            articleForm = res.data;
+            articleForm.value = res.data;
           }
         });
       } else {

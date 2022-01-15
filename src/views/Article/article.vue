@@ -94,6 +94,11 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
 import { tableJson, searchJson } from "./articleJson";
+import { getTag } from "@/http/tag";
+import {
+  useRoute,
+  RouteLocationNormalizedLoaded,
+} from "vue-router";
 import {
   getArticle,
   delArticle,
@@ -106,7 +111,8 @@ export default defineComponent({
   name: "Article",
   components: {},
   setup() {
-    let searchForm = reactive<ISearchForm>({ title: "", tag: -1 });
+    const route:RouteLocationNormalizedLoaded=useRoute()
+    let searchForm = reactive<ISearchForm>({ title: "", tag: '' });
     const tableData = ref<IArticleItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     function searchList() {
@@ -150,8 +156,16 @@ export default defineComponent({
         }
       });
     }
+    function getTagList() {
+      getTag("", 1, 99999999).then((res) => {
+        if (res.code == 200) {
+          searchJson.searchItems.tag.selectOptions=res.data.list
+        }
+      });
+    }
 
     searchList();
+    getTagList()
     return {
       tableData,
       tableJson,

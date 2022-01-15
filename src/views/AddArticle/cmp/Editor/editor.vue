@@ -24,7 +24,6 @@ export default defineComponent({
       let description: string = render
         .replace(/<[^<>]+>/g, "")
         .replace(/[\r\n]/g, " ");
-      console.log(value, description);
       emit("getDescription", description);
       emit("update:mdValue", value);
     }

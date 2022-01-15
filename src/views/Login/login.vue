@@ -61,7 +61,6 @@ export default defineComponent({
     function login() {
       if (!userInfo.username || !userInfo.password) return;
       accountLoginRequest(userInfo.username, userInfo.password).then((res) => {
-        console.log(22, res);
         if (res.code == 200) {
           const inFifteenMinutes: Date = new Date(
             new Date().getTime() + 6 * 60 * 60 * 1000

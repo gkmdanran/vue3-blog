@@ -30,10 +30,10 @@ export const tableJson = {
             label: "发表时间",
             prop: "createAt",
             slotName: "createAt",
-            width:170
+            width: 170
         },
         {
-            width:200,
+            width: 200,
             label: "操作",
             slotName: 'handler'
         }

@@ -11,5 +11,5 @@ export interface IArticleItem {
 }
 export interface ISearchForm {
     title: string
-    tag: number
+    tag: string
 }
