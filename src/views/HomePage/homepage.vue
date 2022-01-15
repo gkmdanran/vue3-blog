@@ -29,18 +29,10 @@
           <i class="el-icon-chat-dot-round"></i>
           <span>留言管理</span>
         </el-menu-item>
-        <el-menu-item index="/skin">
-          <i class="el-icon-goods"></i>
-          <span>皮肤管理</span>
-        </el-menu-item>
-        <!-- <el-menu-item index="/filelists">
+        <el-menu-item index="/file">
           <i class="el-icon-folder-opened"></i>
-          <span>文件清理</span>
+          <span>文件管理</span>
         </el-menu-item>
-        <el-menu-item index="/music">
-          <i class="el-icon-headset"></i>
-          <span>音乐管理</span>
-        </el-menu-item> -->
       </el-menu>
     </el-aside>
     <el-container>
@@ -110,8 +102,9 @@ export default defineComponent({
       () => route.path,
       () => {
         if (route.path == "/home") activeIndex.value = "";
-        else if (route.path == "/article/add") activeIndex.value = "/article";
-        else if (route.path == "/picturelist") activeIndex.value = "/picture";
+        else if (route.path.includes("/article"))
+          activeIndex.value = "/article";
+        else if (route.path.includes("/photo")) activeIndex.value = "/photo";
         else activeIndex.value = route.path;
       }
     );

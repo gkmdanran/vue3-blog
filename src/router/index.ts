@@ -27,11 +27,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Photo/photo.vue')
       },
       {
-        path: '/filelists',
-        name: 'File',
-        component: () => import('../views/File/file.vue')
-      },
-      {
         path: '/article',
         name: 'Article',
         component: () => import('../views/Article/article.vue')

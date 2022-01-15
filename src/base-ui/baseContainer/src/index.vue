@@ -34,7 +34,7 @@ export default defineComponent({
   props: {
     separator: {
       type: String,
-      default: "/",
+      default: ">",
     },
     breadcrumbs: {
       type: Array as PropType<IBreadcrumb[]>,
