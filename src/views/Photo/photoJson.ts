@@ -9,6 +9,13 @@ export const addDialogJson = {
                     trigger: "blur",
                 },
             ],
+            password: [
+                {
+                    pattern: /^[a-zA-z0-9]{4,10}$/,
+                    message: "请输入4-10位的英文或数字",
+                    trigger: "blur",
+                },
+            ],
         },
     },
     formItems: {
@@ -26,6 +33,13 @@ export const addDialogJson = {
                 maxlength: 2
             }
         },
-
+        password: {
+            type: "input",
+            label: "密码",
+            attrs: {
+                type: 'password',
+                showPassword: true
+            }
+        }
     },
 };

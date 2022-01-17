@@ -66,6 +66,7 @@ export default defineComponent({
           label: "旧密码",
           attrs: {
             type: "password",
+            showPassword: true
           },
         },
         newPassword: {
@@ -73,6 +74,7 @@ export default defineComponent({
           label: "新密码",
           attrs: {
             type: "password",
+            showPassword: true
           },
         },
         confirmPassword: {
@@ -81,6 +83,7 @@ export default defineComponent({
           attrs: {
             type: "password",
             placeholder: "请确认密码",
+            showPassword: true
           },
         },
       },

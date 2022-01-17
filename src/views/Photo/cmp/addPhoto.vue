@@ -30,6 +30,7 @@ export default defineComponent({
     const addForm = reactive<IPhotoForm>({
       title: "",
       tag: "",
+      password: "",
     });
     const visible = ref<boolean>(false);
     function submitForm() {

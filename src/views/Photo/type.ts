@@ -11,6 +11,6 @@ export interface IPhoto {
 export interface IPhotoForm {
     id?: string,
     title: string,
-    password?: string,
+    password: string,
     tag: string,
 }
