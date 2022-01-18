@@ -11,7 +11,7 @@
         >管 理</el-button
       >
       <div class="lists">
-        <add-photo />
+        <add-photo @success="getPhotoList" />
         <photo-item
           @delPhoto="delSuccess"
           v-for="photo in photoList"
@@ -46,19 +46,7 @@ export default defineComponent({
     const isDel = ref<boolean>(false);
     const total = ref<number>(0);
     const page = ref<number>(1);
-    const photoList = ref<IPhoto[]>([
-      {
-        id: "1",
-        title: "测试",
-        count: 10,
-        tag: "旅游",
-        password: "22",
-        tagColor: "#cccccc",
-        cover:
-          "http://101.132.68.0:3000/uploads/o_2005140636202-1605682812635.jpg",
-        createAt: "2021-12-21",
-      },
-    ]);
+    const photoList = ref<IPhoto[]>([]);
     function managePhoto() {
       isDel.value = !isDel.value;
     }
@@ -70,6 +58,7 @@ export default defineComponent({
       getPhotos(page.value, 10).then((res) => {
         if (res.code == 200) {
           photoList.value = res.data.list;
+          total.value=res.data.total
         }
       });
     }
@@ -84,6 +73,7 @@ export default defineComponent({
       total,
       page,
       photoList,
+      getPhotoList,
       delSuccess,
       managePhoto,
       handleCurrentChange,

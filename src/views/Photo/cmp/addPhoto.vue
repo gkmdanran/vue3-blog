@@ -26,6 +26,7 @@ export default defineComponent({
   name: "AddPhoto",
   props: {},
   components: {},
+  emits:['success'],
   setup(props, { emit }) {
     const addForm = reactive<IPhotoForm>({
       title: "",
@@ -36,8 +37,8 @@ export default defineComponent({
     function submitForm() {
       addPhoto(addForm).then((res) => {
         if (res.code == 200) {
-          ElMessage({ type: "success", message: "创建成功" });
           visible.value = false;
+          emit('success')
         }
       });
     }

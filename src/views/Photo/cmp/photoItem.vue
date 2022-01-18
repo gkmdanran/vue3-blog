@@ -10,7 +10,7 @@
         <i class="el-icon-delete" @click.stop="delPhoto(photo)"></i>
       </div>
     </transition>
-    <i class="el-icon-lock"></i>
+    <i class="el-icon-lock" v-if="photo.password"></i>
     <img
       class="picture"
       :src="
@@ -18,10 +18,10 @@
           ? require('../../../assets/img/timg.jpg')
           : photo.cover
       "
-      :title="photo.createAt"
+      :title="$filters.formatTime(photo.createAt)"
     />
     <div class="title">{{ photo.title }}</div>
-    <div class="count">{{ photo.count }}</div>
+    <div class="count">{{ photo.count||0 }}</div>
     <div
       class="tag"
       :style="{ borderColor: photo.tagColor }"
@@ -35,7 +35,7 @@
 import { defineComponent, ref, reactive, PropType } from "vue";
 import { IPhoto } from "../type";
 import { deletePhoto } from "@/http/photo";
-import { ElMessage } from "element-plus";
+import { ElMessageBox } from "element-plus";
 export default defineComponent({
   name: "PhotoItem",
   props: {
@@ -52,15 +52,19 @@ export default defineComponent({
   components: {},
   setup(props, { emit }) {
     function delPhoto(photo: IPhoto) {
-      deletePhoto(photo.id).then((res) => {
-        if (res.code == 200) {
-          ElMessage({
-            type: "success",
-            message: "删除成功！",
+      ElMessageBox.confirm("确认删除该相册吗？", "提示", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          deletePhoto(photo.id).then((res) => {
+            if (res.code == 200) {
+              emit("delPhoto");
+            }
           });
-          emit("delPhoto");
-        }
-      });
+        })
+        .catch(() => {});
     }
     function active(e: any) {
       e.currentTarget.children[0].className = "el-icon-delete active";
