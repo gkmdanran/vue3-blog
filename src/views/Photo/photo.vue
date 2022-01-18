@@ -6,8 +6,9 @@
     <template #other>
       <el-button
         type="danger"
-        style="margin-left: 15px; width: 100px"
+        style="margin-left: 15px; width: 80px"
         @click="managePhoto"
+        size="small"
         >管 理</el-button
       >
       <div class="lists">

@@ -29,6 +29,10 @@
           <i class="el-icon-chat-dot-round"></i>
           <span>留言管理</span>
         </el-menu-item>
+        <el-menu-item index="/link">
+          <i class="el-icon-s-promotion"></i>
+          <span>友链管理</span>
+        </el-menu-item>
         <el-menu-item index="/file">
           <i class="el-icon-folder-opened"></i>
           <span>文件管理</span>
