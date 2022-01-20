@@ -7,6 +7,7 @@
         :search-json="searchJson"
         @changeForm="changeForm"
         label-width="80px"
+        v-model="searchForm"
       >
       </base-search>
     </template>
@@ -95,10 +96,7 @@
 import { defineComponent, ref, reactive } from "vue";
 import { tableJson, searchJson } from "./articleJson";
 import { getTag } from "@/http/tag";
-import {
-  useRoute,
-  RouteLocationNormalizedLoaded,
-} from "vue-router";
+import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import {
   getArticle,
   delArticle,
@@ -109,16 +107,15 @@ import { IPagination } from "@/base-ui/baseTable/src/type";
 import { IArticleItem, ISearchForm } from "./type";
 export default defineComponent({
   name: "Article",
-  components: {},
   setup() {
-    const route:RouteLocationNormalizedLoaded=useRoute()
-    let searchForm = reactive<ISearchForm>({ title: "", tag: '' });
+    const route: RouteLocationNormalizedLoaded = useRoute();
+    let searchForm = ref<ISearchForm>({ title: "1111", tag: "" });
     const tableData = ref<IArticleItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     function searchList() {
       getArticle(
-        searchForm.title,
-        searchForm.tag,
+        searchForm.value.title,
+        searchForm.value.tag,
         pagination.page,
         pagination.size
       ).then((res) => {
@@ -129,8 +126,7 @@ export default defineComponent({
       });
     }
 
-    function changeForm(form: ISearchForm) {
-      searchForm = form;
+    function changeForm() {
       pagination.page = 1;
       searchList();
     }
@@ -159,14 +155,14 @@ export default defineComponent({
     function getTagList() {
       getTag("", 1, 99999999).then((res) => {
         if (res.code == 200) {
-          searchJson.searchItems.tag.selectOptions=res.data.list
+          searchJson.searchItems.tag.selectOptions = res.data.list;
         }
       });
     }
-
     searchList();
-    getTagList()
+    getTagList();
     return {
+      searchForm,
       tableData,
       tableJson,
       searchJson,

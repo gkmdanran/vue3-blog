@@ -28,7 +28,7 @@
             :placeholder="item.placeholder || `请输入${item.label}`"
             style="width: 100%"
             v-bind="item.attrs || {}"
-            :model-value="initForm[key]"
+            :model-value="modelValue[key]"
             @update:modelValue="handleValueChange($event, key, item)"
           />
           <el-select
@@ -37,7 +37,7 @@
             :placeholder="item.placeholder || `请选择${item.label}`"
             style="width: 100%"
             v-bind="item.attrs || {}"
-            :model-value="initForm[key]"
+            :model-value="modelValue[key]"
             @update:modelValue="handleValueChange($event, key, item)"
           >
             <el-option
@@ -60,7 +60,7 @@
             :placeholder="item.placeholder || `请选择${item.label}`"
             style="width: 100%"
             v-bind="item.attrs || {}"
-            :model-value="initForm[key]"
+            :model-value="modelValue[key]"
             @update:modelValue="handleValueChange($event, key, item)"
           >
           </el-time-picker>
@@ -70,7 +70,7 @@
             :placeholder="item.placeholder || `请选择${item.label}`"
             style="width: 100%"
             v-bind="item.attrs || {}"
-            :model-value="initForm[key]"
+            :model-value="modelValue[key]"
             @update:modelValue="handleValueChange($event, key, item)"
           >
           </el-date-picker>
@@ -89,23 +89,22 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    modelValue: {
+      type: Object,
+      required: true,
+    },
   },
-  emits: ["changeForm"],
+  emits: ["changeForm", "update:modelValue"],
   components: {},
   setup(props, { emit }) {
     const instance = getCurrentInstance();
     const customAttrs = reactive({
       ...instance?.attrs,
     });
-    //初始化表单
-    const initForm = reactive<any>({});
-    for (let key in props.searchJson.searchItems) {
-      initForm[key] = "";
-    }
+    let timeout: number = -1;
     //输入框防抖函数
     function debounce(fn: Function) {
-      let timeout: number = 0;
-      return function () {
+      return () => {
         if (timeout) {
           clearTimeout(timeout);
         }
@@ -114,21 +113,20 @@ export default defineComponent({
         }, 300);
       };
     }
-    const debounceEmit = debounce(() => {
-      emit("changeForm", initForm);
-    });
 
     function handleValueChange(val: any, key: string, item: any) {
-      initForm[key] = val;
+      emit("update:modelValue", { ...props.modelValue, [key]: val });
+      const debounceEmit = debounce(() => {
+        emit("changeForm", { ...props.modelValue, [key]: val });
+      });
       if (item.type == "input") {
         debounceEmit();
       } else {
-        emit("changeForm", initForm);
+        emit("changeForm", { ...props.modelValue, [key]: val });
       }
     }
     return {
       customAttrs,
-      initForm,
       handleValueChange,
     };
   },
