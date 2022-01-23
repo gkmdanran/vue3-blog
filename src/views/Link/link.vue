@@ -5,6 +5,7 @@
     <template #search>
       <base-search
         :search-json="searchJson"
+        v-model="searchForm"
         @changeForm="changeForm"
         label-width="70px"
       >
@@ -56,7 +57,7 @@ export default defineComponent({
   name: "Link",
   components: {},
   setup() {
-    let searchForm = reactive<ISearchForm>({ title: "", description: "" });
+    let searchForm = ref<ISearchForm>({ title: "", description: "" });
     const tableData = ref<ILink[]>([
       {
         id: "",
@@ -70,8 +71,8 @@ export default defineComponent({
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     function searchList() {
       getLink(
-        searchForm.title,
-        searchForm.description,
+        searchForm.value.title,
+        searchForm.value.description,
         pagination.page,
         pagination.size
       ).then((res) => {
@@ -81,10 +82,7 @@ export default defineComponent({
         }
       });
     }
-    function changeForm(form: ISearchForm) {
-      searchForm = {
-        ...form,
-      };
+    function changeForm() {
       pagination.page = 1;
       searchList();
     }
@@ -102,6 +100,7 @@ export default defineComponent({
       tableJson,
       searchJson,
       pagination,
+      searchForm,
       confirmDelLink,
       changeForm,
       searchList,

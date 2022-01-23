@@ -5,6 +5,7 @@
     <template #search>
       <base-search
         :search-json="searchJson"
+        v-model="searchForm"
         @changeForm="changeForm"
         label-width="70px"
       >
@@ -53,14 +54,14 @@ export default defineComponent({
   name: "Chat",
   components: {},
   setup() {
-    let searchForm = reactive<ISearchForm>({ queryPeople: "", queryDate: "" });
+    let searchForm = ref<ISearchForm>({ queryPeople: "", queryDate: "" });
     const tableData = ref<IChatItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     const delIds = ref<string[]>([]);
     function searchList() {
       getChat(
-        searchForm.queryPeople,
-        searchForm.queryDate,
+        searchForm.value.queryPeople,
+        searchForm.value.queryDate,
         pagination.page,
         pagination.size
       ).then((res) => {
@@ -72,7 +73,7 @@ export default defineComponent({
     }
 
     function changeForm(form: ISearchForm) {
-      searchForm = {
+      searchForm.value = {
         ...form,
         queryDate: form.queryDate
           ? dayjs(form.queryDate).format("YYYY-MM-DD")
@@ -102,6 +103,7 @@ export default defineComponent({
       searchJson,
       pagination,
       delIds,
+      searchForm,
       confirmDelChats,
       changeForm,
       searchList,

@@ -1,7 +1,7 @@
 import hyRequest from "@/serivce";
 import type { IDataType } from './type'
 import { IArticleForm } from "@/views/AddArticle/type";
-export function getArticle(title: string, tag: string, page: number, size: number): Promise<IDataType> {
+export function getArticle(title: string, tag: string | number, page: number, size: number): Promise<IDataType> {
     return hyRequest.get<IDataType>({
         url: `/article/list`,
         params: {

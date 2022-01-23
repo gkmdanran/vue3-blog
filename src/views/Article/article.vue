@@ -109,7 +109,7 @@ export default defineComponent({
   name: "Article",
   setup() {
     const route: RouteLocationNormalizedLoaded = useRoute();
-    let searchForm = ref<ISearchForm>({ title: "1111", tag: "" });
+    let searchForm = ref<ISearchForm>({ title: "", tag: "" });
     const tableData = ref<IArticleItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     function searchList() {
@@ -159,6 +159,8 @@ export default defineComponent({
         }
       });
     }
+    if(route.query.tagId!==undefined)
+      searchForm.value.tag=Number(route.query.tagId)
     searchList();
     getTagList();
     return {

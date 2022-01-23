@@ -6,10 +6,10 @@ export interface IArticleItem {
     description: string,
     star: number,
     createAt: string,
-    isHide:number,
-    isTop:number
+    isHide: number,
+    isTop: number
 }
 export interface ISearchForm {
     title: string
-    tag: string
+    tag: string | number
 }

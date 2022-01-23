@@ -7,6 +7,7 @@
         label-width="70px"
         :search-json="searchJson"
         @changeForm="changeForm"
+        v-model="searchForm"
       ></base-search>
     </template>
     <template #table>
@@ -60,12 +61,12 @@ export default defineComponent({
   name: "Tag",
   components: {},
   setup() {
-    let searchForm = reactive<ISearchForm>({ query: "" });
+    let searchForm = ref<ISearchForm>({ query: "" });
     const tableData = ref<ITagItem[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
     const router = useRouter();
     function searchList() {
-      getTag(searchForm.query, pagination.page, pagination.size).then((res) => {
+      getTag(searchForm.value.query, pagination.page, pagination.size).then((res) => {
         if (res.code == 200) {
           tableData.value = res.data.list;
           pagination.total = res.data.total;
@@ -80,8 +81,7 @@ export default defineComponent({
         }
       });
     }
-    function changeForm(form: ISearchForm) {
-      searchForm = form;
+    function changeForm() {
       pagination.page = 1;
       searchList();
     }
@@ -100,6 +100,7 @@ export default defineComponent({
       tableJson,
       searchJson,
       pagination,
+      searchForm,
       changeForm,
       searchList,
       checkArticle,
