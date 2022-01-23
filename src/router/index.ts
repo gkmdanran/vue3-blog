@@ -27,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Photo/photo.vue')
       },
       {
+        path: '/photo/:id',
+        name: 'Picture',
+        component: () => import('../views/Picture/picture.vue')
+      },
+      {
         path: '/link',
         name: 'Link',
         component: () => import('../views/Link/link.vue')

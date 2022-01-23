@@ -1,5 +1,5 @@
 <template>
-  <div class="photo-item">
+  <div class="photo-item" @click="toDetail(photo.id)">
     <transition name="fade">
       <div
         class="del"
@@ -21,7 +21,7 @@
       :title="$filters.formatTime(photo.createAt)"
     />
     <div class="title">{{ photo.title }}</div>
-    <div class="count">{{ photo.count||0 }}</div>
+    <div class="count">{{ photo.count || 0 }}</div>
     <div
       class="tag"
       :style="{ borderColor: photo.tagColor }"
@@ -36,6 +36,7 @@ import { defineComponent, ref, reactive, PropType } from "vue";
 import { IPhoto } from "../type";
 import { deletePhoto } from "@/http/photo";
 import { ElMessageBox } from "element-plus";
+import { useRouter, Router } from "vue-router";
 export default defineComponent({
   name: "PhotoItem",
   props: {
@@ -51,6 +52,7 @@ export default defineComponent({
   emits: ["delPhoto"],
   components: {},
   setup(props, { emit }) {
+    const router: Router = useRouter();
     function delPhoto(photo: IPhoto) {
       ElMessageBox.confirm("确认删除该相册吗？", "提示", {
         confirmButtonText: "确认",
@@ -72,11 +74,17 @@ export default defineComponent({
     function unActtive(e: any) {
       e.currentTarget.children[0].className = "el-icon-delete";
     }
-
+    function toDetail(id: string) {
+      router.push({
+        name: "Picture",
+        params: { id },
+      });
+    }
     return {
       active,
       unActtive,
       delPhoto,
+      toDetail,
     };
   },
 });

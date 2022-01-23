@@ -24,3 +24,23 @@ export function addPhoto(addForm: IPhotoForm): Promise<IDataType> {
         data: addForm
     })
 }
+export function editPhoto(editForm: IPhotoForm): Promise<IDataType> {
+    return hyRequest.put<IDataType>({
+        url: `/photo/edit`,
+        data: editForm
+    })
+}
+export function getDetail(id: string): Promise<IDataType> {
+    return hyRequest.get<IDataType>({
+        url: `/photo/detail`,
+        params: {
+            id
+        }
+    })
+}
+export function uploadPhoto(form: FormData): Promise<IDataType> {
+    return hyRequest.post<IDataType>({
+        url: `/photo/upload`,
+        data: form
+    })
+}
