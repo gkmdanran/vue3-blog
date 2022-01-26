@@ -42,7 +42,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "success"],
   components: {},
   setup(props, { emit }) {
     const fileLists = ref<UploadFile[]>([]);
@@ -53,13 +53,21 @@ export default defineComponent({
       emit("update:modelValue", false);
     }
     function uploadPic() {
+      if (fileLists.value.length == 0)
+        return ElMessage({
+          type: "warning",
+          message: `请选择照片后再上传`,
+        });
       let formData = new FormData();
       formData.append("id", String(route.params.id));
       fileLists.value.forEach((file: any) => {
         formData.append("files", file.raw);
       });
       uploadPhoto(formData).then((res) => {
-        console.log(res);
+        if (res.code == 200) {
+          emit("update:modelValue", false);
+          emit("success");
+        }
       });
     }
     function handleChange(file: UploadFile, fileList: UploadFile[]) {

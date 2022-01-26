@@ -30,11 +30,11 @@ export function editPhoto(editForm: IPhotoForm): Promise<IDataType> {
         data: editForm
     })
 }
-export function getDetail(id: string): Promise<IDataType> {
+export function getDetail(id: string, page: number, size: number): Promise<IDataType> {
     return hyRequest.get<IDataType>({
         url: `/photo/detail`,
         params: {
-            id
+            id, page, size
         }
     })
 }
@@ -42,5 +42,21 @@ export function uploadPhoto(form: FormData): Promise<IDataType> {
     return hyRequest.post<IDataType>({
         url: `/photo/upload`,
         data: form
+    })
+}
+export function setPhotoCover(url: string): Promise<IDataType> {
+    return hyRequest.put<IDataType>({
+        url: `/photo/cover`,
+        data: {
+            url,
+        }
+    })
+}
+export function delPictures(ids: number[]): Promise<IDataType> {
+    return hyRequest.delete<IDataType>({
+        url: `/photo/delpic`,
+        data: {
+            ids,
+        }
     })
 }

@@ -14,3 +14,7 @@ export interface IPhotoForm {
     password: string,
     tag: string,
 }
+export interface IPic{
+    id:number,
+    url:string
+}
