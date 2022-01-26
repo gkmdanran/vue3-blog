@@ -76,7 +76,7 @@ export default defineComponent({
     function confirmDelTag(id: string) {
       delTag(id).then((res) => {
         if (res.code == 200) {
-          pagination.page = 1;
+          
           searchList();
         }
       });

@@ -46,7 +46,7 @@ export default defineComponent({
   components: {},
   setup(props, { emit }) {
     const fileLists = ref<UploadFile[]>([]);
-    const limit: number = 4;
+    const limit: number = 9;
     const route: RouteLocationNormalizedLoaded = useRoute();
     function handleClose() {
       fileLists.value = [];
@@ -65,7 +65,7 @@ export default defineComponent({
       });
       uploadPhoto(formData).then((res) => {
         if (res.code == 200) {
-          emit("update:modelValue", false);
+          handleClose()
           emit("success");
         }
       });

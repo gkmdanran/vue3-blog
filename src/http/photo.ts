@@ -44,10 +44,11 @@ export function uploadPhoto(form: FormData): Promise<IDataType> {
         data: form
     })
 }
-export function setPhotoCover(url: string): Promise<IDataType> {
+export function setPhotoCover(id:string,url: string): Promise<IDataType> {
     return hyRequest.put<IDataType>({
         url: `/photo/cover`,
         data: {
+            id,
             url,
         }
     })

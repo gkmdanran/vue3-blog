@@ -111,16 +111,7 @@ export default defineComponent({
     });
     const visible = ref<boolean>(false);
     const uploadVisible = ref<boolean>(false);
-    const picList = ref<IPic[]>([
-      {
-        id: 1,
-        url: "https://t7.baidu.com/it/u=1807820346,973783503&fm=218&app=125&f=JPEG?w=121&h=75&s=F1C1F91F8F4C4CCC0E7175DA0300B037",
-      },
-      {
-        id: 2,
-        url: "https://t7.baidu.com/it/u=1807820346,973783503&fm=218&app=125&f=JPEG?w=121&h=75&s=F1C1F91F8F4C4CCC0E7175DA0300B037",
-      },
-    ]);
+    const picList = ref<IPic[]>([]);
     const previewList = ref<string[]>([]);
     function getPictureList() {
       getDetail(String(route.params.id), page.value, 20).then((res) => {
@@ -146,6 +137,8 @@ export default defineComponent({
     }
     function handleCurrentChange(val: number) {
       page.value = val;
+      checkAll.value = false;
+      checkedPics.value = [];
       getPictureList();
     }
     function handleCheckedPicsChange(value: number[]) {
@@ -165,7 +158,13 @@ export default defineComponent({
           type: "warning",
           message: "请选择一张图片",
         });
-      setPhotoCover(checkedPics.value[0].url);
+      setPhotoCover(String(route.params.id), checkedPics.value[0].url).then(
+        (res) => {
+          if (res.code == 200) {
+            manage();
+          }
+        }
+      );
     }
     function delPics() {
       ElMessageBox.confirm(
@@ -188,7 +187,7 @@ export default defineComponent({
         })
         .catch(() => {});
     }
-    // getPictureList();
+    getPictureList();
     return {
       total,
       page,

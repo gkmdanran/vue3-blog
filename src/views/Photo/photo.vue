@@ -65,7 +65,6 @@ export default defineComponent({
     }
     function delSuccess() {
       isDel.value = false;
-      page.value = 1;
       getPhotoList();
     }
     getPhotoList();
