@@ -53,8 +53,9 @@
           <div class="pic" v-for="item in picList" :key="item.id">
             <el-checkbox :label="item" v-show="showCheck"></el-checkbox>
             <el-image
+              :title="$filters.formatTime(item.createAt)"
               style="width: 100%; height: 100%"
-              :src="item.url"
+              :src="item.previewUrl"
               fit="cover"
               :preview-src-list="previewList"
             ></el-image>
@@ -64,7 +65,7 @@
       <div class="footer">
         <el-pagination
           v-model:currentPage="page"
-          :page-size="20"
+          :page-size="15"
           layout="total, prev, pager, next"
           :total="total"
           @current-change="handleCurrentChange"
@@ -114,7 +115,7 @@ export default defineComponent({
     const picList = ref<IPic[]>([]);
     const previewList = ref<string[]>([]);
     function getPictureList() {
-      getDetail(String(route.params.id), page.value, 20).then((res) => {
+      getDetail(String(route.params.id), page.value, 15).then((res) => {
         title.value = res.data.title;
         editForm.id = res.data.id;
         editForm.title = res.data.title;
@@ -158,7 +159,7 @@ export default defineComponent({
           type: "warning",
           message: "请选择一张图片",
         });
-      setPhotoCover(String(route.params.id), checkedPics.value[0].url).then(
+      setPhotoCover(String(route.params.id), checkedPics.value[0].previewUrl).then(
         (res) => {
           if (res.code == 200) {
             manage();
@@ -177,8 +178,8 @@ export default defineComponent({
         }
       )
         .then(() => {
-          let ids: number[] = checkedPics.value.map((item) => item.id);
-          delPictures(ids).then((res) => {
+          let pics: IPic[] = checkedPics.value
+          delPictures(pics).then((res) => {
             if (res.code == 200) {
               manage();
               getPictureList();

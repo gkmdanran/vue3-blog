@@ -59,3 +59,10 @@ export function editArticle(id: string, articleForm: IArticleForm): Promise<IDat
         }
     })
 }
+export function uploadArticlePic(form:FormData): Promise<IDataType> {
+    return hyRequest.post<IDataType>({
+        url: `/article/upload`,
+        data: form
+    })
+}
+

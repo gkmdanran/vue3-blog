@@ -14,7 +14,10 @@ export interface IPhotoForm {
     password: string,
     tag: string,
 }
-export interface IPic{
-    id:number,
-    url:string
+export interface IPic {
+    id: number,
+    url: string,
+    previewUrl: string,
+    createAt: string,
+    filename: string
 }

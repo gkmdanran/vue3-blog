@@ -1,6 +1,6 @@
 import hyRequest from "@/serivce";
 import type { IDataType } from './type'
-import { IPhotoForm } from '@/views/Photo/type'
+import { IPhotoForm ,IPic} from '@/views/Photo/type'
 export function getPhotos(page: number, size: number): Promise<IDataType> {
     return hyRequest.get<IDataType>({
         url: `/photo/list`,
@@ -53,11 +53,11 @@ export function setPhotoCover(id:string,url: string): Promise<IDataType> {
         }
     })
 }
-export function delPictures(ids: number[]): Promise<IDataType> {
+export function delPictures(pics: IPic[]): Promise<IDataType> {
     return hyRequest.delete<IDataType>({
         url: `/photo/delpic`,
         data: {
-            ids,
+            pics,
         }
     })
 }

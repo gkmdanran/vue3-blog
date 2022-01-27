@@ -110,7 +110,8 @@ export default defineComponent({
           activeIndex.value = "/article";
         else if (route.path.includes("/photo")) activeIndex.value = "/photo";
         else activeIndex.value = route.path;
-      }
+      },
+      {immediate:true}
     );
     function changeCollapse() {
       isCollapse.value = !isCollapse.value;
@@ -133,9 +134,6 @@ export default defineComponent({
 
     currentTime.value = useFormateDate(Date.now());
     getTime();
-    if (route.path != "/home") activeIndex.value = route.path;
-    if (route.path == "/article/add") activeIndex.value = "/article";
-    if (route.path == "/picturelist") activeIndex.value = "/picture";
     onBeforeUnmount(() => {
       clearInterval(timer);
     });
