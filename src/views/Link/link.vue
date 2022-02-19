@@ -25,6 +25,9 @@
             >添加友链</el-button
           >
         </template>
+        <template #description="scope">
+          <base-collapse-text :text="scope.row.description" />
+        </template>
         <template #href="scope">
           <el-link @click="openUrl(scope.row.href)">{{
             scope.row.href
