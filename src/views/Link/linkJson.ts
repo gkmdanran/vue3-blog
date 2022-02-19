@@ -2,11 +2,6 @@ export const tableJson = {
     title: '友链列表',
     columns: [
         {
-            label: '头像',
-            prop: "photo",
-            slotName:'photo'
-        },
-        {
             label: '标题',
             prop: "title",
         },
@@ -17,8 +12,8 @@ export const tableJson = {
         },
         {
             label: "链接",
-            prop: "link",
-            slotName:'link'
+            prop: "href",
+            slotName:'href'
         },
         {
             label:'操作',
@@ -39,3 +34,45 @@ export const searchJson = {
         }
     }
 }
+export const dialogJson = {
+    formAttributes: {
+      labelWidth: "60px",
+      rules: {
+        title: [
+          {
+            required: true,
+            message: "请输入标题",
+            trigger: "blur",
+          },
+        ],
+        href: [
+          {
+            required: true,
+            message: "请输入连接",
+            trigger: "blur",
+          },
+        ],
+       
+      },
+    },
+    formItems: {
+      title: {
+        type: "input",
+        label: "标题",
+      },
+      href: {
+        type: "input",
+        label: "链接",
+      },
+      description: {
+        type: "input",
+        label: "描述",
+        attrs: {
+          type: "textarea",
+          maxlength:"50",
+          showWordLimit:true,
+          rows:5
+        },
+      },
+    },
+  };

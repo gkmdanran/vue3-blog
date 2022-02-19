@@ -21,21 +21,19 @@
         @changePagination="searchList"
       >
         <template #topHandler>
-          <el-button type="primary" size="small">添加友链</el-button>
-        </template>
-        <template #photo="scope">
-          <el-image
-            :fit="container"
-            :src="scope.row.photo"
-            :preview-src-list="[scope.row.photo]"
-            >添加友链</el-image
+          <el-button type="primary" size="small" @click="showAdd"
+            >添加友链</el-button
           >
         </template>
-        <template #link="scope">
-          <el-link :href="scope.row.link">{{ scope.row.link }}</el-link>
+        <template #href="scope">
+          <el-link @click="openUrl(scope.row.href)">{{
+            scope.row.href
+          }}</el-link>
         </template>
         <template #handler="scope">
-          <el-button type="text">编辑</el-button>
+          <el-button type="text" @click="showEdit(scope.row.id)"
+            >编辑</el-button
+          >
           <base-button
             type="text"
             :confirm="{ message: '确认删除此链接吗' }"
@@ -45,30 +43,39 @@
         </template>
       </base-table>
     </template>
+    <template #other>
+      <base-dialog-form
+        :title="title"
+        width="400px"
+        v-model:dialogForm="linkForm"
+        v-model="visible"
+        :form-json="dialogJson"
+        @success="submitForm"
+      ></base-dialog-form>
+    </template>
   </base-container>
 </template>
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
 import { ILink, ISearchForm } from "./type";
-import { tableJson, searchJson } from "./linkJson";
-import { getLink, delLink } from "@/http/link";
+import { tableJson, searchJson, dialogJson } from "./linkJson";
+import { getLink, delLink, addLink, editLink, detailLink } from "@/http/link";
 import { IPagination } from "@/base-ui/baseTable/src/type";
 export default defineComponent({
   name: "Link",
   components: {},
   setup() {
     let searchForm = ref<ISearchForm>({ title: "", description: "" });
-    const tableData = ref<ILink[]>([
-      {
-        id: "",
-        title: "gkm-ui",
-        description: "一个基于elementui",
-        photo:
-          "https://t7.baidu.com/it/u=1807820346,973783503&fm=218&app=125&f=JPEG?w=121&h=75&s=F1C1F91F8F4C4CCC0E7175DA0300B037",
-        link: "http://www.baidu.com",
-      },
-    ]);
+    const tableData = ref<ILink[]>([]);
     const pagination = reactive<IPagination>({ page: 1, size: 10, total: 0 });
+    const linkForm = ref<ILink>({
+      id: "",
+      title: "",
+      description: "",
+      href: "",
+    });
+    const title = ref<string>("");
+    const visible = ref<boolean>(false);
     function searchList() {
       getLink(
         searchForm.value.title,
@@ -94,6 +101,39 @@ export default defineComponent({
         }
       });
     }
+    function openUrl(url: string) {
+      window.open(url);
+    }
+    function showAdd() {
+      title.value = "新增友链";
+      visible.value = true;
+    }
+    function showEdit(id: number) {
+      detailLink(id).then((res) => {
+        if (res.code == 200) {
+          linkForm.value = res.data;
+          title.value = "编辑友链";
+          visible.value = true;
+        }
+      });
+    }
+    function submitForm() {
+      if (!linkForm.value.id) {
+        addLink(linkForm.value).then((res) => {
+          if (res.code == 200) {
+            visible.value = false;
+            searchList();
+          }
+        });
+      } else {
+        editLink(linkForm.value).then((res) => {
+          if (res.code == 200) {
+            visible.value = false;
+            searchList();
+          }
+        });
+      }
+    }
     searchList();
     return {
       tableData,
@@ -101,9 +141,17 @@ export default defineComponent({
       searchJson,
       pagination,
       searchForm,
+      linkForm,
+      visible,
+      dialogJson,
+      title,
+      showEdit,
+      showAdd,
+      submitForm,
       confirmDelLink,
       changeForm,
       searchList,
+      openUrl,
     };
   },
 });

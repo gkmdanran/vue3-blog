@@ -2,8 +2,7 @@ export interface ILink {
     id: string,
     title: string,
     description: string,
-    photo: string,
-    link: string
+    href: string
 }
 export interface ISearchForm {
     title: string,

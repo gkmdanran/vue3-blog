@@ -2,6 +2,7 @@
   <div>
     <el-dialog
       v-bind="customAttrs"
+      :title="title"
       :model-value="modelValue"
       @close="handleClose"
     >
@@ -208,6 +209,9 @@ export default defineComponent({
   inheritAttrs: false,
   name: "baseDialogForm",
   props: {
+    title:{
+      type:String
+    },
     modelValue: {
       required: true,
       type: Boolean,
