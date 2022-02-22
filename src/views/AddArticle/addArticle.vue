@@ -147,6 +147,8 @@ export default defineComponent({
         getArticleDetail(String(route.params.id)).then((res) => {
           if (res.code == 200) {
             articleForm.value = res.data;
+          }else{
+            router.push('/article')
           }
         });
       } else {

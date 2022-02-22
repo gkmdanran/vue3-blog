@@ -93,6 +93,7 @@ import { IPhotoForm, IPic } from "@/views/Photo/type";
 import { BASE_URL } from "@/serivce/request/config";
 import upload from "./cmp/upload.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter, Router } from "vue-router";
 export default defineComponent({
   name: "Picture",
   components: { upload },
@@ -114,18 +115,23 @@ export default defineComponent({
     const uploadVisible = ref<boolean>(false);
     const picList = ref<IPic[]>([]);
     const previewList = ref<string[]>([]);
+    const router: Router = useRouter();
     function getPictureList() {
       getDetail(String(route.params.id), page.value, 15).then((res) => {
-        title.value = res.data.title;
-        editForm.id = res.data.id;
-        editForm.title = res.data.title;
-        editForm.tag = res.data.tag;
-        editForm.password = res.data.password;
-        total.value = res.data.pictures.total;
-        picList.value = res.data.pictures.list;
-        previewList.value = res.data.pictures.list.map(
-          (item: IPic) => item.url
-        );
+        if (res.code == 200) {
+          title.value = res.data.title;
+          editForm.id = res.data.id;
+          editForm.title = res.data.title;
+          editForm.tag = res.data.tag;
+          editForm.password = res.data.password;
+          total.value = res.data.pictures.total;
+          picList.value = res.data.pictures.list;
+          previewList.value = res.data.pictures.list.map(
+            (item: IPic) => item.url
+          );
+        } else {
+          router.push("/photo");
+        }
       });
     }
     function submitForm() {
@@ -159,13 +165,14 @@ export default defineComponent({
           type: "warning",
           message: "请选择一张图片",
         });
-      setPhotoCover(String(route.params.id), checkedPics.value[0].previewUrl).then(
-        (res) => {
-          if (res.code == 200) {
-            manage();
-          }
+      setPhotoCover(
+        String(route.params.id),
+        checkedPics.value[0].previewUrl
+      ).then((res) => {
+        if (res.code == 200) {
+          manage();
         }
-      );
+      });
     }
     function delPics() {
       ElMessageBox.confirm(
@@ -178,7 +185,7 @@ export default defineComponent({
         }
       )
         .then(() => {
-          let pics: IPic[] = checkedPics.value
+          let pics: IPic[] = checkedPics.value;
           delPictures(pics).then((res) => {
             if (res.code == 200) {
               manage();
