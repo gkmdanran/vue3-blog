@@ -9,7 +9,8 @@ export const tableJson = {
         {
             label: '标签',
             prop: 'tag',
-            slotName: 'tag'
+            slotName: 'tag',
+            width: 275
         },
         {
             label: '概览',

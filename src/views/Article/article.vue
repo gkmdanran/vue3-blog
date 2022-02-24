@@ -28,6 +28,15 @@
             >写博客</el-button
           >
         </template>
+        <template #tag="scope">
+          <el-tag
+            style="width: 80px; text-align: center; margin: 0 2px"
+            v-for="(item, index) in scope.row.tag"
+            :key="index"
+            :type="item.type"
+            >{{ item.name }}</el-tag
+          >
+        </template>
         <template #star="scope">
           <span>
             <i
@@ -159,8 +168,8 @@ export default defineComponent({
         }
       });
     }
-    if(route.query.tagId!==undefined)
-      searchForm.value.tag=Number(route.query.tagId)
+    if (route.query.tagId !== undefined)
+      searchForm.value.tag = Number(route.query.tagId);
     searchList();
     getTagList();
     return {
