@@ -10,7 +10,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/homepage',
     name: 'HomePage',
     component: () => import('../views/HomePage/homepage.vue'),
+    redirect: '/home',
     children: [
+      {
+        path: '/home',
+        name: 'Welcome',
+        component: () => import('../views/Welcome/welcome.vue')
+      },
       {
         path: '/tag',
         name: 'Tag',

@@ -2,6 +2,7 @@ import HYRequest from './request'
 import { BASE_URL, TIME_OUT } from './request/config'
 import { ElMessage } from 'element-plus'
 import Cookies from "js-cookie";
+import router from '@/router'
 const hyRequest = new HYRequest({
     baseURL: BASE_URL,
     timeout: TIME_OUT,
@@ -14,6 +15,9 @@ const hyRequest = new HYRequest({
             return err
         },
         responseInterceptor: (res) => {
+            if (res.data.code == 401) {
+                router.push('/')
+            }
             if (res.data.msg) {
                 ElMessage({
                     message: res.data.msg,
