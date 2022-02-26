@@ -33,10 +33,6 @@
           <i class="el-icon-s-promotion"></i>
           <span>友链管理</span>
         </el-menu-item>
-        <el-menu-item index="/file">
-          <i class="el-icon-folder-opened"></i>
-          <span>文件管理</span>
-        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>

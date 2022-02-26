@@ -18,4 +18,9 @@ export function changePassword(oldPassword: string, newPassword: string): Promis
         },
     })
 }
+export function checkLogin(): Promise<IDataType> {
+    return hyRequest.get<IDataType>({
+        url: '/user/checklogin',
+    })
+}
 

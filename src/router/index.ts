@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-
+import { checkLogin } from "@/http/login";
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -59,6 +59,19 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+router.beforeEach((to, from, next) => {
+  if (to.path == '/') {
+    next()
+  } else {
+    checkLogin().then(res => {
+      if (res.code == 200) {
+        next()
+      } else {
+        next({ name: 'Login' })
+      }
+    })
+  }
 })
 
 export default router
