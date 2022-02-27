@@ -34,7 +34,7 @@ export const tableJson = {
             width: 170
         },
         {
-            width: 200,
+            width: 250,
             label: "操作",
             slotName: 'handler'
         }

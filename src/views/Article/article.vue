@@ -59,6 +59,7 @@
           </span>
         </template>
         <template #handler="scope">
+          <el-button type="text" @click="download(scope.row)">下载</el-button>
           <el-button
             type="text"
             @click="
@@ -107,6 +108,7 @@ import { tableJson, searchJson } from "./articleJson";
 import { getTag } from "@/http/tag";
 import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import {
+  downloadArticle,
   getArticle,
   delArticle,
   changeTopStatus,
@@ -168,6 +170,19 @@ export default defineComponent({
         }
       });
     }
+    function download(row: IArticleItem) {
+      downloadArticle(row.id).then((res) => {
+        let DownloadLink: any = document.createElement("a");
+        DownloadLink.style = "display: none";
+        DownloadLink.download = `${row.title}.md`;
+        let url = URL.createObjectURL(new Blob([res as any]));
+        DownloadLink.href = url;
+        document.body.appendChild(DownloadLink);
+        DownloadLink.click();
+        document.body.removeChild(DownloadLink);
+        window.URL.revokeObjectURL(url);
+      });
+    }
     if (route.query.tagId !== undefined)
       searchForm.value.tag = Number(route.query.tagId);
     searchList();
@@ -183,6 +198,7 @@ export default defineComponent({
       confirmTop,
       changeForm,
       searchList,
+      download,
     };
   },
 });

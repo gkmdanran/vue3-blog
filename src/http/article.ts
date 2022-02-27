@@ -12,6 +12,14 @@ export function getArticle(title: string, tag: string | number, page: number, si
         }
     })
 }
+export function downloadArticle(id: string): Promise<IDataType> {
+    return hyRequest.get<IDataType>({
+        url: `/article/download`,
+        params: {
+            id
+        }
+    })
+}
 export function delArticle(id: string): Promise<IDataType> {
     return hyRequest.delete<IDataType>({
         url: `/article/del`,
@@ -59,7 +67,7 @@ export function editArticle(id: string, articleForm: IArticleForm): Promise<IDat
         }
     })
 }
-export function uploadArticlePic(form:FormData): Promise<IDataType> {
+export function uploadArticlePic(form: FormData): Promise<IDataType> {
     return hyRequest.post<IDataType>({
         url: `/article/upload`,
         data: form
