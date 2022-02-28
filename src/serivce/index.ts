@@ -28,6 +28,13 @@ const hyRequest = new HYRequest({
             return res.data
         },
         responseInterceptorCatch: (err) => {
+            ElMessage({
+                message: '网络错误',
+                type: 'error',
+                duration: 2000
+            })
+            Cookies.set("blog_token", "");
+            router.push('/')
             return err
         }
     }

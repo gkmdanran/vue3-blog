@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { checkLogin } from "@/http/login";
+import Cookies from "js-cookie";
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -68,7 +69,12 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
   if (to.path == '/') {
-    next()
+    if (Cookies.get("blog_token")) {
+      next({ name: 'Welcome' })
+    } else {
+      next()
+
+    }
   } else {
     checkLogin().then(res => {
       if (res.code == 200) {
