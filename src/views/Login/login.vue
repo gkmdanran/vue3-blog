@@ -7,7 +7,7 @@
       </div>
       <div class="right">
         <div class="login_infos">
-          <div class="welcome">欢迎登陆</div>
+          <div class="welcome">欢迎登录</div>
           <div class="names">个人博客后台管理系统</div>
           <form action="" class="fom">
             <div class="us">
